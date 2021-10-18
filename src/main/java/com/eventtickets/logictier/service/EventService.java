@@ -4,7 +4,6 @@ import com.eventtickets.logictier.model.Event;
 
 import java.util.List;
 
-public interface EventService
-{
-  List<Event> getAllEvents();
+public interface EventService {
+    List<Event> getAllEvents();
 }
