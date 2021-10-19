@@ -8,5 +8,5 @@ public interface EventRepository
 {
   List<Event> getAllEvents();
 //  Event getEventById(Long id);
-//  void addEvent(Event event);
+  Event addEvent(Event event);
 }

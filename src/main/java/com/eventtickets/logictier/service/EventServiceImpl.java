@@ -19,4 +19,9 @@ public class EventServiceImpl implements EventService
   {
     return eventRepository.getAllEvents();
   }
+
+  @Override public Event addEvent(Event event)
+  {
+    return eventRepository.addEvent(event);
+  }
 }

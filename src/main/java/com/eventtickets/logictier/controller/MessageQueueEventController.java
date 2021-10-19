@@ -1,5 +1,6 @@
 package com.eventtickets.logictier.controller;
 
+import com.eventtickets.logictier.model.Event;
 import com.eventtickets.logictier.service.EventService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,27 +10,57 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
-public class MessageQueueEventController {
+public class MessageQueueEventController
+{
 
-    @NonNull
-    private RabbitTemplate rabbitTemplate;
-    @NonNull
-    private EventService service;
-    @NonNull
-    private ObjectMapper jsonSerializer;
+  @NonNull private RabbitTemplate rabbitTemplate;
+  @NonNull private EventService service;
+  @NonNull private ObjectMapper jsonSerializer;
 
-    @RabbitListener(queues = "eventTicketLogicQueue")
-    public String receiveMessage(byte[] message) throws JsonProcessingException {
-        String req = new String(message);
+  //    @RabbitListener(queues = "eventTicketLogicQueue")
+  //    public String receiveMessage(byte[] message) throws JsonProcessingException {
+  //        String req = new String(message);
+  //
+  //        switch (req) {
+  //            case "getAllEvents":
+  //                return jsonSerializer.writeValueAsString(service.getAllEvents());
+  //            case "addEvent":
+  //                return jsonSerializer.writeValueAsString(service.addEvent())
+  //
+  //            default:
+  //                throw new IllegalArgumentException();
+  //        }
+  //    }
 
-        switch (req) {
-            case "getAllEvents":
-                return jsonSerializer.writeValueAsString(service.getAllEvents());
-
-            default:
-                throw new IllegalArgumentException();
-        }
+  @RabbitListener(queues = "getAllEvents")
+  public String getAllEvents()
+  {
+    try
+    {
+      return jsonSerializer.writeValueAsString(service.getAllEvents());
+    } catch(Exception e) {
+      throw new RuntimeException(e);
     }
+  }
+
+  @RabbitListener(queues = "addEvent")
+  public String addEvent(byte[] bytes)
+  {
+    try
+    {
+      String json = new String(bytes);
+      Event e = jsonSerializer.readValue(json, Event.class);
+
+      return jsonSerializer.writeValueAsString(service.addEvent(e));
+
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
 }

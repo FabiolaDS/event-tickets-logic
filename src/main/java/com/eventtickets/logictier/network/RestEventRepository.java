@@ -1,6 +1,7 @@
 package com.eventtickets.logictier.network;
 
 import com.eventtickets.logictier.model.Event;
+import com.eventtickets.logictier.network.dto.CreateEventDTO;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,11 @@ public class RestEventRepository implements EventRepository
 
 
     return response.getBody();
+  }
+
+  @Override public Event addEvent(Event event)
+  {
+
+    return restTemplate.postForObject(URL + "/events",event, Event.class);
   }
 }

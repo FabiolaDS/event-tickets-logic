@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Configuration;
 public class MessageQueueConfig {
 
     @Bean
-    public Queue testQueue() {
-        return new Queue("eventTicketLogicQueue");
+    public Queue getAllEventsRequestQueue() {
+        return new Queue("getAllEvents");
     }
-//
-//    @Bean
-//    public MessageQueueEventController mqEventController(RabbitTemplate t, EventService s, ObjectMapper om) {
-//        return new MessageQueueEventController(t, s, om);
-//    }
+
+    @Bean
+    public Queue addEventQueue() {
+        return new Queue("addEvent");
+    }
 }
