@@ -2,6 +2,7 @@ package com.eventtickets.logictier.controller;
 
 import com.eventtickets.logictier.service.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;

@@ -26,12 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
   @Override public User findByEmail(String email)
   {
-    try
-    {
       return restTemplate
-          .getForObject(dataUrl + "/users", User.class, "email", email);
-    } catch(HttpClientErrorException.BadRequest ex) {
-      throw new IllegalArgumentException("No user with email " + email);
-    }
+          .getForObject(dataUrl + "/users?email={email}", User.class, email);
   }
 }

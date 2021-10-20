@@ -36,11 +36,11 @@ import org.springframework.stereotype.Component;
     }
   }
 
-  @RabbitListener(queues = "loginUser") public String loginUser(byte[] bytes)
+  @RabbitListener(queues = "loginUser", ackMode = "AUTO") public String loginUser(byte[] bytes)
   {
-    String json = new String(bytes);
     try
     {
+      String json = new String(bytes);
       LoginUserDTO loginUserDTO = jsonSerializer
           .readValue(json, LoginUserDTO.class);
       User user = service.login(loginUserDTO);
