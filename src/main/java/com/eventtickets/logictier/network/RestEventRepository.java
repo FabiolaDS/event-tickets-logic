@@ -1,7 +1,7 @@
 package com.eventtickets.logictier.network;
 
 import com.eventtickets.logictier.model.Event;
-import com.eventtickets.logictier.network.dto.CreateEventDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +13,16 @@ import java.util.List;
 public class RestEventRepository implements EventRepository
 {
   private RestTemplate restTemplate;
-  private static final String URL = "http://localhost:8081";
+  private String dataUrl;
 
-  public RestEventRepository(RestTemplate restTemplate) {
+  public RestEventRepository(@Value("${eventTicket.data.url}") String dataUrl, RestTemplate restTemplate) {
+    this.dataUrl = dataUrl;
     this.restTemplate = restTemplate;
   }
 
   @Override public List<Event> getAllEvents()
   {
-    ResponseEntity<List<Event>> response = restTemplate.exchange(URL + "/events",
+    ResponseEntity<List<Event>> response = restTemplate.exchange(dataUrl + "/events",
         HttpMethod.GET, null, new ParameterizedTypeReference<List<Event>>()
         {});
 
@@ -32,6 +33,6 @@ public class RestEventRepository implements EventRepository
   @Override public Event addEvent(Event event)
   {
 
-    return restTemplate.postForObject(URL + "/events",event, Event.class);
+    return restTemplate.postForObject(dataUrl + "/events",event, Event.class);
   }
 }

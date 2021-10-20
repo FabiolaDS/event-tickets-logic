@@ -7,16 +7,21 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class MessageQueueConfig {
+@Configuration public class MessageQueueConfig
+{
 
-    @Bean
-    public Queue getAllEventsRequestQueue() {
-        return new Queue("getAllEvents");
-    }
+  @Bean public Queue getAllEventsRequestQueue()
+  {
+    return new Queue("getAllEvents");
+  }
 
-    @Bean
-    public Queue addEventQueue() {
-        return new Queue("addEvent");
-    }
+  @Bean public Queue addEventQueue()
+  {
+    return new Queue("addEvent");
+  }
+
+  @Bean public Queue registerUserQueue()
+  {
+    return new Queue("registerUser");
+  }
 }
