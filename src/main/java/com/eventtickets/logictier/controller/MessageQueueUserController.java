@@ -2,6 +2,7 @@ package com.eventtickets.logictier.controller;
 
 import com.eventtickets.logictier.model.User;
 import com.eventtickets.logictier.service.UserService;
+import com.eventtickets.logictier.service.dto.LoginUserDTO;
 import com.eventtickets.logictier.service.dto.RegisterUserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,5 +34,26 @@ import org.springframework.stereotype.Component;
     {
       throw new RuntimeException(e);
     }
+  }
+
+  @RabbitListener(queues = "loginUser") public String loginUser(byte[] bytes)
+  {
+    String json = new String(bytes);
+    try
+    {
+      LoginUserDTO loginUserDTO = jsonSerializer
+          .readValue(json, LoginUserDTO.class);
+      User user = service.login(loginUserDTO);
+      return jsonSerializer.writeValueAsString(user);
+    }
+    catch (JsonProcessingException e)
+    {
+      throw new RuntimeException(e);
+    }
+    catch (IllegalArgumentException e)
+    {
+      return e.getMessage();
+    }
+
   }
 }

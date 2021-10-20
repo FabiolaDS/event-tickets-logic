@@ -24,4 +24,9 @@ import org.springframework.context.annotation.Configuration;
   {
     return new Queue("registerUser");
   }
+
+  @Bean public Queue loginUserQueue()
+  {
+    return new Queue("loginUser");
+  }
 }

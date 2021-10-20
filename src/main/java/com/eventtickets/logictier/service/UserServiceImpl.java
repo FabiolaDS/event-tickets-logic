@@ -2,11 +2,11 @@ package com.eventtickets.logictier.service;
 
 import com.eventtickets.logictier.model.User;
 import com.eventtickets.logictier.network.UserRepository;
+import com.eventtickets.logictier.service.dto.LoginUserDTO;
 import com.eventtickets.logictier.service.dto.RegisterUserDto;
 import org.springframework.stereotype.Service;
 
-@Service
-public class UserServiceImpl implements UserService
+@Service public class UserServiceImpl implements UserService
 {
   private UserRepository userRepository;
 
@@ -20,6 +20,23 @@ public class UserServiceImpl implements UserService
     User user = new User(userDto.getEmail(), userDto.getFullName(),
         userDto.getPassword());
     return userRepository.createUser(user);
+
+  }
+
+  @Override public User login(LoginUserDTO loginUserDTO)
+  {
+    try
+    {
+      User u = userRepository.findByEmail(loginUserDTO.getEmail());
+      if(u.getPassword().equals(loginUserDTO.getPassword()))
+        return u;
+      throw new IllegalArgumentException("Incorrect password");
+    }
+    catch (IllegalArgumentException e)
+    {
+      throw e;
+    }
+
 
   }
 }
