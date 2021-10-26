@@ -5,6 +5,7 @@ import com.eventtickets.logictier.service.UserService;
 import com.eventtickets.logictier.service.dto.LoginUserDTO;
 import com.eventtickets.logictier.service.dto.RegisterUserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,8 @@ import org.springframework.stereotype.Component;
     }
   }
 
-  @RabbitListener(queues = "loginUser", ackMode = "AUTO") public String loginUser(byte[] bytes)
+  @RabbitListener(queues = "loginUser", ackMode = "AUTO") public String loginUser(
+      byte[] bytes)
   {
     try
     {
@@ -55,5 +57,24 @@ import org.springframework.stereotype.Component;
       return e.getMessage();
     }
 
+  }
+
+  @RabbitListener(queues = "updateUser") public String updateUser(byte[] bytes)
+  {
+    try
+    {
+      String json = new String(bytes);
+      User updateUser = jsonSerializer.readValue(json, User.class);
+      updateUser = service.updateUserData(updateUser);
+      return jsonSerializer.writeValueAsString(updateUser);
+    }
+    catch (JsonMappingException e)
+    {
+      throw new RuntimeException(e);
+    }
+    catch (JsonProcessingException e)
+    {
+      return e.getMessage();
+    }
   }
 }

@@ -8,4 +8,5 @@ public interface UserService
 {
   User registerUser(RegisterUserDto userDto);
   User login(LoginUserDTO loginUserDTO);
+  User updateUserData(User user);
 }

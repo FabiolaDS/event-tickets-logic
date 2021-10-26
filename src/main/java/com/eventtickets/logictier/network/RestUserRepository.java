@@ -26,7 +26,13 @@ import org.springframework.web.client.RestTemplate;
 
   @Override public User findByEmail(String email)
   {
-      return restTemplate
-          .getForObject(dataUrl + "/users?email={email}", User.class, email);
+    return restTemplate
+        .getForObject(dataUrl + "/users?email={email}", User.class, email);
+  }
+
+  @Override public User updateUser(Long id, User user)
+  {
+    return restTemplate
+        .patchForObject(dataUrl + "/users/" + id, user, User.class);
   }
 }

@@ -30,4 +30,9 @@ import org.springframework.context.annotation.Configuration;
   {
     return new Queue("loginUser");
   }
+
+  @Bean public Queue updateUserQueue()
+  {
+    return new Queue("updateUser");
+  }
 }

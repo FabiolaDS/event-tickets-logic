@@ -25,13 +25,18 @@ import org.springframework.stereotype.Service;
 
   @Override public User login(LoginUserDTO loginUserDTO)
   {
-      User u = userRepository.findByEmail(loginUserDTO.getEmail());
-      if(u == null)
-        throw new IllegalArgumentException("Login incorrect");
-      if(u.getPassword().equals(loginUserDTO.getPassword()))
-        return u;
+    User u = userRepository.findByEmail(loginUserDTO.getEmail());
+    if (u == null)
+      throw new IllegalArgumentException("Login incorrect");
+    if (u.getPassword().equals(loginUserDTO.getPassword()))
+      return u;
 
-      throw new IllegalArgumentException("Incorrect password");
+    throw new IllegalArgumentException("Incorrect password");
 
+  }
+
+  @Override public User updateUserData(User user)
+  {
+    return userRepository.updateUser(user.getId(), user);
   }
 }
