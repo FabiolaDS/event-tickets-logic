@@ -16,4 +16,6 @@ public class User
   @NonNull private String fullName;
   @NonNull private String password;
 
+  private boolean isAdmin;
+
 }
