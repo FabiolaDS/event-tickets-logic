@@ -35,6 +35,10 @@ import org.springframework.stereotype.Component;
     {
       throw new RuntimeException(e);
     }
+    catch (IllegalArgumentException e)
+    {
+      return e.getMessage();
+    }
   }
 
   @RabbitListener(queues = "loginUser", ackMode = "AUTO") public String loginUser(

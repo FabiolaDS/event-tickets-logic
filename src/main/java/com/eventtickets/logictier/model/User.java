@@ -3,8 +3,6 @@ package com.eventtickets.logictier.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @Data @NoArgsConstructor
 
@@ -16,13 +14,14 @@ import lombok.RequiredArgsConstructor;
   private String fullName;
   private String password;
 
-  private boolean isAdmin;
+  private boolean admin;
 
   public User(String email, String fullName, String password)
   {
     this.email = email;
     this.fullName = fullName;
     this.password = password;
+    this.admin = false;
   }
 
 }
