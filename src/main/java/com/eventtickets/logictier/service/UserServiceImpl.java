@@ -19,10 +19,6 @@ import org.springframework.stereotype.Service;
   {
     User user = new User(userDto.getEmail(), userDto.getFullName(),
         userDto.getPassword());
-    if(userRepository.findByEmail(userDto.getEmail()).getEmail().equals(user.getEmail()))
-    {
-      throw new IllegalArgumentException("User with this email is already registered");
-    }
     return userRepository.createUser(user);
 
   }
