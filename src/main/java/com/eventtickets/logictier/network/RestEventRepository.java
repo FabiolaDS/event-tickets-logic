@@ -30,6 +30,11 @@ public class RestEventRepository implements EventRepository
     return response.getBody();
   }
 
+  @Override
+  public Event getEventById(Long id) {
+    return restTemplate.getForObject(dataUrl+ "/events/"+id, Event.class);
+  }
+
   @Override public Event addEvent(Event event)
   {
 

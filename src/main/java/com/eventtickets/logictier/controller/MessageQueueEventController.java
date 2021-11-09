@@ -10,6 +10,10 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -60,6 +64,22 @@ public class MessageQueueEventController
     }
     catch (Exception e)
     {
+      throw new RuntimeException(e);
+    }
+  }
+  @RabbitListener(queues ="getEventById" )
+  public String getEventById(byte[] bytes)
+  {
+    ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+    buffer.order(ByteOrder.LITTLE_ENDIAN);
+    buffer.put(bytes);
+    buffer.flip();
+
+    long eventId = buffer.getLong();
+    try {
+      return jsonSerializer.writeValueAsString(service.getById(eventId));
+    } catch (JsonProcessingException e) {
+
       throw new RuntimeException(e);
     }
   }
