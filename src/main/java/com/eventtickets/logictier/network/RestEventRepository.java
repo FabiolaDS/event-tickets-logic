@@ -10,19 +10,16 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 @Component
-public class RestEventRepository implements EventRepository
+public class RestEventRepository extends RestRepository implements EventRepository
 {
-  private RestTemplate restTemplate;
-  private String dataUrl;
 
   public RestEventRepository(@Value("${eventTicket.data.url}") String dataUrl, RestTemplate restTemplate) {
-    this.dataUrl = dataUrl;
-    this.restTemplate = restTemplate;
+    super(restTemplate, dataUrl, "events");
   }
 
   @Override public List<Event> getAllEvents()
   {
-    ResponseEntity<List<Event>> response = restTemplate.exchange(dataUrl + "/events",
+    ResponseEntity<List<Event>> response = rest().exchange(url(),
         HttpMethod.GET, null, new ParameterizedTypeReference<List<Event>>()
         {});
 
@@ -32,12 +29,12 @@ public class RestEventRepository implements EventRepository
 
   @Override
   public Event getEventById(Long id) {
-    return restTemplate.getForObject(dataUrl+ "/events/"+id, Event.class);
+    return rest().getForObject(url(id), Event.class);
   }
 
   @Override public Event addEvent(Event event)
   {
 
-    return restTemplate.postForObject(dataUrl + "/events",event, Event.class);
+    return rest().postForObject(url(),event, Event.class);
   }
 }

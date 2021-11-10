@@ -7,32 +7,30 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-@Component public class RestUserRepository implements UserRepository
+@Component public class RestUserRepository extends RestRepository implements UserRepository
 {
-  private RestTemplate restTemplate;
-  private String dataUrl;
+
 
   public RestUserRepository(@Value("${eventTicket.data.url}") String dataUrl,
       RestTemplate restTemplate)
   {
-    this.dataUrl = dataUrl;
-    this.restTemplate = restTemplate;
+    super(restTemplate,dataUrl,"/users");
   }
 
   @Override public User createUser(User user)
   {
-    return restTemplate.postForObject(dataUrl + "/users", user, User.class);
+    return rest().postForObject(url(), user, User.class);
   }
 
   @Override public User findByEmail(String email)
   {
-    return restTemplate
-        .getForObject(dataUrl + "/users?email={email}", User.class, email);
+    return rest()
+        .getForObject(url("?email={email}"), User.class, email);
   }
 
   @Override public User updateUser(Long id, User user)
   {
-    return restTemplate
-        .patchForObject(dataUrl + "/users/" + id, user, User.class);
+    return rest()
+        .patchForObject(url(id), user, User.class);
   }
 }

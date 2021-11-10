@@ -10,25 +10,21 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 @Component
-public class RestTicketRepository implements TicketRepository {
-    private RestTemplate restTemplate;
-    private String dataUrl;
+public class RestTicketRepository extends RestRepository implements TicketRepository {
 
     public RestTicketRepository (RestTemplate restTemplate, @Value("${eventTicket.data.url}") String dataUrl){
-        this.restTemplate= restTemplate;
-        this.dataUrl= dataUrl;
+        super(restTemplate,dataUrl,"tickets");
     }
 
     @Override
     public Ticket createTicket(Ticket ticket) {
-       return  restTemplate.postForObject(dataUrl+ "/tickets", ticket,Ticket.class);
+       return  rest().postForObject(url(), ticket,Ticket.class);
     }
 
     @Override
     public List<Ticket> getByUserId(long id) {
-        ResponseEntity<List<Ticket>> response = restTemplate.exchange(dataUrl + "/tickets/byUser/" + id,
-                HttpMethod.GET, null, new ParameterizedTypeReference<List<Ticket>>()
-                {});
+        ResponseEntity<List<Ticket>> response = rest().exchange(url("byUser", id),
+                HttpMethod.GET, null, new ParameterizedTypeReference<List<Ticket>>() {});
         return response.getBody();
     }
 
