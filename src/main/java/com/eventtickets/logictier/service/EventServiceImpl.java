@@ -2,7 +2,6 @@ package com.eventtickets.logictier.service;
 
 import com.eventtickets.logictier.model.Event;
 import com.eventtickets.logictier.network.EventRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

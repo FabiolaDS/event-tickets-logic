@@ -7,18 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
 public class MessageQueueTicketController {
-    @NonNull
-    private RabbitTemplate rabbitTemplate;
+
     @NonNull private TicketService service;
     @NonNull private ObjectMapper jsonSerializer;
 

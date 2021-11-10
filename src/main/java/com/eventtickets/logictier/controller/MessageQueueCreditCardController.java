@@ -1,16 +1,16 @@
 package com.eventtickets.logictier.controller;
 
 import com.eventtickets.logictier.model.CreditCard;
-import com.eventtickets.logictier.model.Event;
 import com.eventtickets.logictier.service.CreditCardService;
-import com.eventtickets.logictier.service.EventService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class MessageQueueCreditCardController {
     @NonNull
     private CreditCardService cservice;
