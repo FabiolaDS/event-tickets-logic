@@ -70,12 +70,7 @@ public class MessageQueueEventController
   @RabbitListener(queues ="getEventById" )
   public String getEventById(byte[] bytes)
   {
-    ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-    buffer.order(ByteOrder.LITTLE_ENDIAN);
-    buffer.put(bytes);
-    buffer.flip();
-
-    long eventId = buffer.getLong();
+    long eventId = Long.parseLong(new String(bytes));
     try {
       return jsonSerializer.writeValueAsString(service.getById(eventId));
     } catch (JsonProcessingException e) {

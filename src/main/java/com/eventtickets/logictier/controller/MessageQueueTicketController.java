@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
@@ -30,7 +31,6 @@ public class MessageQueueTicketController {
             BookTicket t = jsonSerializer.readValue(json, BookTicket.class);
 
             return jsonSerializer.writeValueAsString(service.bookTicket(t));
-
         }
         catch (Exception e)
         {
@@ -40,19 +40,12 @@ public class MessageQueueTicketController {
     @RabbitListener(queues = "getTicketsForUser")
     public String getTicketsForUser(byte[]bytes)
     {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
-        buffer.put(bytes);
-        buffer.flip();
-
-        long userId = buffer.getLong();
+        long userId = Long.parseLong(new String(bytes));
         try {
             return jsonSerializer.writeValueAsString(service.getTicketsForUser(userId));
         } catch (JsonProcessingException e) {
 
             throw new RuntimeException(e);
         }
-
-
     }
 }
