@@ -6,6 +6,7 @@ import com.eventtickets.logictier.model.Ticket;
 import com.eventtickets.logictier.network.EventRepository;
 import com.eventtickets.logictier.network.PaymentRepository;
 import com.eventtickets.logictier.network.TicketRepository;
+import com.eventtickets.logictier.service.dto.FindTicketDto;
 import com.eventtickets.logictier.service.dto.MakePaymentDto;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,11 @@ public class PaymentServiceImpl implements PaymentService {
         );
         return paymentRepository.createPayment(payment);
 
+    }
+
+    @Override
+    public Payment findForTicket(FindTicketDto findTicketDto) {
+        return paymentRepository.getById(findTicketDto.getBuyerId(),findTicketDto.getEventId());
     }
 
 }

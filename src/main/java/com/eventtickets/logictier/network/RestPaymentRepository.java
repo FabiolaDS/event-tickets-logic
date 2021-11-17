@@ -1,6 +1,7 @@
 package com.eventtickets.logictier.network;
 
 import com.eventtickets.logictier.model.Payment;
+import com.eventtickets.logictier.model.Ticket;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,5 +20,10 @@ public class RestPaymentRepository extends RestRepository implements PaymentRepo
         return rest().postForObject(url(),payment,Payment.class);
 
 
+    }
+
+    @Override
+    public Payment getById(long buyer, long event) {
+        return  rest().getForObject(url(String.format("/byUser/%d/%d", buyer, event)), Payment.class);
     }
 }

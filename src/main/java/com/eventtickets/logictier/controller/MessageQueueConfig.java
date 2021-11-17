@@ -164,4 +164,18 @@ public class MessageQueueConfig {
                 .with("makePayment");
     }
 
+    @Bean
+    public Queue findPaymentForTicketQueue()
+    {
+        return new Queue("findPaymentForTicket");
+    }
+    @Bean
+    public Binding findPaymentForTicketBinding(DirectExchange logicTierExchange, Queue findPaymentForTicketQueue)
+    {
+        return BindingBuilder
+                .bind(findPaymentForTicketQueue)
+                .to(logicTierExchange)
+                .with("findPaymentForTicket");
+    }
+
 }

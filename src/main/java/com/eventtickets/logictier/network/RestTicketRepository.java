@@ -30,8 +30,7 @@ public class RestTicketRepository extends RestRepository implements TicketReposi
 
     @Override
     public Ticket getByEventIdAndUserId(long eventId, long userId) {
-        //TODO
-        return null;
+        return rest().getForObject(url(String.format("/byUser/%d/%d", userId, eventId)), Ticket.class);
     }
 
 }
