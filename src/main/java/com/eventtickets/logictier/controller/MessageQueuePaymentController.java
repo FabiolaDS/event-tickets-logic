@@ -24,6 +24,9 @@ public class MessageQueuePaymentController {
     public String makePayment(byte[] bytes) {
         try {
             String json = new String(bytes);
+
+            System.out.println(json);
+
             MakePaymentDto makePaymentDto = objectMapper.readValue(json, MakePaymentDto.class);
             return objectMapper.writeValueAsString(paymentService.makePayment(makePaymentDto));
         } catch (JsonProcessingException e) {

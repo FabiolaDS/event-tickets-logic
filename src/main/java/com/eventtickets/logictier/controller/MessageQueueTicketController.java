@@ -22,6 +22,9 @@ public class MessageQueueTicketController {
         try
         {
             String json = new String(bytes);
+
+            System.out.println("TICKET " + json);
+
             BookTicket t = jsonSerializer.readValue(json, BookTicket.class);
 
             return jsonSerializer.writeValueAsString(service.bookTicket(t));

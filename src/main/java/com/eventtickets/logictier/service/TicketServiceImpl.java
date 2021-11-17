@@ -1,21 +1,26 @@
 package com.eventtickets.logictier.service;
 
+import com.eventtickets.logictier.model.Event;
 import com.eventtickets.logictier.model.Ticket;
 import com.eventtickets.logictier.network.TicketRepository;
 import com.eventtickets.logictier.service.dto.BookTicket;
+import com.eventtickets.logictier.service.dto.TicketWithEventDto;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class TicketServiceImpl implements TicketService {
 
+    @NonNull
     private TicketRepository ticketRepository;
-
-    public TicketServiceImpl(TicketRepository ticketRepository) {
-        this.ticketRepository = ticketRepository;
-    }
+    @NonNull
+    private EventService eventService;
 
     @Override
     public Ticket bookTicket(BookTicket bookTicket) {
@@ -23,16 +28,30 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = new Ticket(bookTicket.getBuyerId(),
                 bookTicket.getEventId(),
                 ticketNr,
-                bookTicket.getPrice(),
-                bookTicket.getNrTickets()
+                bookTicket.getNrOfTickets()
         );
-        return ticketRepository.createTicket(ticket);
 
+        System.out.println("CREATED TICKET " + ticket);
+
+        return ticketRepository.createTicket(ticket);
     }
 
     @Override
-    public List<Ticket> getTicketsForUser(Long id) {
-        return ticketRepository.getByUserId(id);
+    public List<TicketWithEventDto> getTicketsForUser(Long id) {
+        return ticketRepository.getByUserId(id)
+                .stream()
+                .map(t -> {
+                    Event e = eventService.getById(t.getEventId());
+                    return new TicketWithEventDto(
+                            t.getTicketNr(),
+                            e.getName(),
+                            e.getDateTime(),
+                            e.getLocation(),
+                            e.getPrice() * t.getNrOfTickets(),
+                            t.getNrOfTickets(),
+                            e.getThumbnail());
+                })
+                .collect(Collectors.toList());
     }
 }
 

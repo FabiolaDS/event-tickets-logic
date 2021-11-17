@@ -10,8 +10,5 @@ import lombok.NoArgsConstructor;
 public class BookTicket {
     private long buyerId;
     private long eventId;
-    private int nrTickets;
-    private double price;
-
-
+    private int nrOfTickets;
 }

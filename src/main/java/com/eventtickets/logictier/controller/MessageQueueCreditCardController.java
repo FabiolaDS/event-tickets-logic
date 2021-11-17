@@ -21,6 +21,9 @@ public class MessageQueueCreditCardController {
     public String addCreditCard(byte[] bytes) {
         try {
             String json = new String(bytes);
+
+            System.out.println("RECEIVED " + json);
+
             CreditCard c = jsonSerializer.readValue(json, CreditCard.class);
 
             return jsonSerializer.writeValueAsString(cservice.addCreditCard(c));
