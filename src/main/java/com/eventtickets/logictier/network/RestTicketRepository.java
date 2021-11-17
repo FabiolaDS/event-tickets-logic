@@ -28,4 +28,10 @@ public class RestTicketRepository extends RestRepository implements TicketReposi
         return response.getBody();
     }
 
+    @Override
+    public Ticket getByEventIdAndUserId(long eventId, long userId) {
+        //TODO
+        return null;
+    }
+
 }

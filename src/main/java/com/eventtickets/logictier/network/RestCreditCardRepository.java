@@ -25,7 +25,7 @@ public class RestCreditCardRepository extends RestRepository implements CreditCa
 
     @Override
     public List<CreditCard> getByOwnerId(long ownerId) {
-        ResponseEntity<List<CreditCard>> response = rest().exchange(url(ownerId),
+        ResponseEntity<List<CreditCard>> response = rest().exchange(url("user", ownerId),
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<CreditCard>>()
                 {});
 

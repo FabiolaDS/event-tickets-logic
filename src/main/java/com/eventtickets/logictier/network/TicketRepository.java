@@ -7,5 +7,6 @@ import java.util.List;
 public interface TicketRepository {
     Ticket createTicket(Ticket ticket);
     List<Ticket> getByUserId(long id);
+    Ticket getByEventIdAndUserId(long eventId, long userId);
 
 }
