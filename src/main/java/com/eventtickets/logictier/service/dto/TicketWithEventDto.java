@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TicketWithEventDto {
 //    private LocalDateTime ticketTimestamp;
+
+    private Long eventId;
     private String ticketNumber ;
     private String nameOfEvent;
     private LocalDateTime dateTimeOfEvent;

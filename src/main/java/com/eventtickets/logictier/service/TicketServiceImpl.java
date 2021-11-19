@@ -43,6 +43,7 @@ public class TicketServiceImpl implements TicketService {
                 .map(t -> {
                     Event e = eventService.getById(t.getEventId());
                     return new TicketWithEventDto(
+                            e.getId(),
                             t.getTicketNr(),
                             e.getName(),
                             e.getDateTime(),
@@ -50,6 +51,7 @@ public class TicketServiceImpl implements TicketService {
                             e.getPrice() * t.getNrOfTickets(),
                             t.getNrOfTickets(),
                             e.getThumbnail());
+
                 })
                 .collect(Collectors.toList());
     }
