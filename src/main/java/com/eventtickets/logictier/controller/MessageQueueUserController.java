@@ -3,7 +3,7 @@ package com.eventtickets.logictier.controller;
 import com.eventtickets.logictier.model.User;
 import com.eventtickets.logictier.service.UserService;
 import com.eventtickets.logictier.service.dto.LoginUserDTO;
-import com.eventtickets.logictier.service.dto.RegisterUserDto;
+import com.eventtickets.logictier.service.dto.RegisterUserDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,12 +25,13 @@ import org.springframework.stereotype.Component;
     try
     {
       String json = new String(bytes);
-      RegisterUserDto userDto = jsonSerializer
-          .readValue(json, RegisterUserDto.class);
+      RegisterUserDTO userDto = jsonSerializer
+          .readValue(json, RegisterUserDTO.class);
       User userCreated = service.registerUser(userDto);
       return jsonSerializer.writeValueAsString(userCreated);
     }
     catch (JsonProcessingException e)
+
     {
       throw new RuntimeException(e);
     }

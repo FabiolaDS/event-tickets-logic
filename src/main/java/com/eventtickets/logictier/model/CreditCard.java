@@ -3,15 +3,28 @@ package com.eventtickets.logictier.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.CreditCardNumber;
+
+import javax.validation.constraints.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreditCard {
-    private String cardNumber;
-    private int expiryMonth;
-    private int expiryYear;
-    private int cvv;
-    private String cardOwnerName;
-    private long ownerId;
+public class CreditCard
+{
+  @CreditCardNumber
+  private String cardNumber;
+  @Min(value = 1, message = "Expiry month should be higher than 1")
+  @Max(value = 12, message = "Expiry month should not be higher than 12")
+  private int expiryMonth;
+  @Min(2000)
+  private int expiryYear;
+  @Min(value = 0, message = "Invalid CVV")
+  @Max(value = 999, message = "Invalid CVV")
+  private int cvv;
+  @NotBlank
+  @Size(min = 5, max = 150, message = "The name should be between 5 and 150 character long")
+  private String cardOwnerName;
+  @Positive
+  private long ownerId;
 }

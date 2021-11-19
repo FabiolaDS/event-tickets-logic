@@ -1,7 +1,7 @@
 package com.eventtickets.logictier.controller;
 
 import com.eventtickets.logictier.service.TicketService;
-import com.eventtickets.logictier.service.dto.BookTicket;
+import com.eventtickets.logictier.service.dto.BookTicketDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
@@ -25,7 +25,7 @@ public class MessageQueueTicketController {
 
             System.out.println("TICKET " + json);
 
-            BookTicket t = jsonSerializer.readValue(json, BookTicket.class);
+            BookTicketDTO t = jsonSerializer.readValue(json, BookTicketDTO.class);
 
             return jsonSerializer.writeValueAsString(service.bookTicket(t));
         }
