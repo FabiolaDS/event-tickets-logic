@@ -1,18 +1,18 @@
-package com.eventtickets.logictier.model;
+package com.eventtickets.logictier.service.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class CreditCard
+public class CreateCardDTO
 {
-  private Long id;
   @CreditCardNumber
   private String cardNumber;
   @Min(value = 1, message = "Expiry month should be higher than 1")
@@ -26,4 +26,5 @@ public class CreditCard
   @NotBlank
   @Size(min = 5, max = 150, message = "The name should be between 5 and 150 character long")
   private String cardOwnerName;
+  private long ownerId;
 }

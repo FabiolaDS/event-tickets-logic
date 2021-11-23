@@ -17,11 +17,11 @@ class RestEventRepositoryTest
 
   @Autowired private EventRepository eventRepository;
 
-  @Test void getAllEvents()
+  @Test void getUpcomingEvents()
   {
 
     List<Event> eventList;
-    eventList = eventRepository.getAllEvents();
+    eventList = eventRepository.findByTimeOfTheEventAfter(LocalDateTime.now());
     System.out.println(eventList);
     assertTrue(eventList.size() > 0);
   }

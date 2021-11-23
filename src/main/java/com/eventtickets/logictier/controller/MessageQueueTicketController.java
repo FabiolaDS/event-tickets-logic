@@ -11,38 +11,46 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class MessageQueueTicketController {
+public class MessageQueueTicketController
+{
 
-    @NonNull private TicketService service;
-    @NonNull private ObjectMapper jsonSerializer;
+  @NonNull
+  private TicketService service;
+  @NonNull
+  private ObjectMapper jsonSerializer;
 
-    @RabbitListener(queues = "bookTicket")
-    public  String bookTicket(byte[] bytes)
+  @RabbitListener(queues = "bookTicket")
+  public String bookTicket(byte[] bytes)
+  {
+    try
     {
-        try
-        {
-            String json = new String(bytes);
+      String json = new String(bytes);
 
-            System.out.println("TICKET " + json);
+      System.out.println("TICKET " + json);
 
-            BookTicketDTO t = jsonSerializer.readValue(json, BookTicketDTO.class);
+      BookTicketDTO t = jsonSerializer.readValue(json, BookTicketDTO.class);
 
-            return jsonSerializer.writeValueAsString(service.bookTicket(t));
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
+      return jsonSerializer.writeValueAsString(service.bookTickets(t));
     }
-    @RabbitListener(queues = "getTicketsForUser")
-    public String getTicketsForUser(byte[]bytes)
+    catch (Exception e)
     {
-        long userId = Long.parseLong(new String(bytes));
-        try {
-            return jsonSerializer.writeValueAsString(service.getTicketsForUser(userId));
-        } catch (JsonProcessingException e) {
-
-            throw new RuntimeException(e);
-        }
+      throw new RuntimeException(e);
     }
+  }
+
+  @RabbitListener(queues = "getTicketsForUser")
+  public String getTicketsForUser(byte[] bytes)
+  {
+    long userId = Long.parseLong(new String(bytes));
+    try
+    {
+      return jsonSerializer
+          .writeValueAsString(service.getTicketsForUser(userId));
+    }
+    catch (JsonProcessingException e)
+    {
+
+      throw new RuntimeException(e);
+    }
+  }
 }

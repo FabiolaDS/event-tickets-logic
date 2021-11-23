@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -18,13 +19,15 @@ public class RestEventRepository extends RestRepository implements EventReposito
     }
 
     @Override
-    public List<Event> getAllEvents() {
-        ResponseEntity<List<Event>> response = rest().exchange(url(),
-                HttpMethod.GET, null, new ParameterizedTypeReference<List<Event>>() {
-                });
+    public List<Event> findByTimeOfTheEventAfter(LocalDateTime localDateTime)
+    {
+        ResponseEntity<List<Event>> response = rest().exchange(url("?after=" + localDateTime),
+            HttpMethod.GET, null, new ParameterizedTypeReference<List<Event>>() {
+            });
 
         return response.getBody();
     }
+
 
     @Override
     public Event getEventById(Long id) {

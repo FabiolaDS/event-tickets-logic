@@ -32,14 +32,15 @@ public class Event
   @URL(message = "Please specify a valid url")
   private String thumbnail;
 
-  @Positive(message = "You have to book at least 1 ticket")
-  private int nrOfTickets;
+  @Positive(message = "There has to be at least 1 available ticket")
+  private int availableTickets;
 
   private boolean isCancelled;
 
   @Future(message = "The date of the event has to be in the future")
-  private LocalDateTime dateTime;
+  private LocalDateTime timeOfTheEvent;
 
   @PositiveOrZero(message = "The price cannot be negative")
-  private double price;
+  private double ticketPrice;
+  private long organizerId;
 }

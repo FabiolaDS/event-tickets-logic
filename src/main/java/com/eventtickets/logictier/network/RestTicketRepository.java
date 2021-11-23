@@ -17,8 +17,8 @@ public class RestTicketRepository extends RestRepository implements TicketReposi
     }
 
     @Override
-    public Ticket createTicket(Ticket ticket) {
-       return  rest().postForObject(url(), ticket, Ticket.class);
+    public Ticket createTicket(long buyerId, Ticket ticket) {
+       return  rest().postForObject(url(buyerId), ticket, Ticket.class);
     }
 
     @Override
@@ -28,9 +28,5 @@ public class RestTicketRepository extends RestRepository implements TicketReposi
         return response.getBody();
     }
 
-    @Override
-    public Ticket getByEventIdAndUserId(long eventId, long userId) {
-        return rest().getForObject(url(String.format("byUser/%d/%d", userId, eventId)), Ticket.class);
-    }
 
 }

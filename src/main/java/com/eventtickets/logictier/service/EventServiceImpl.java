@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -15,18 +16,19 @@ import java.util.Set;
 public class EventServiceImpl implements EventService
 {
   private EventRepository eventRepository;
-  @NonNull
   private Validator validator;
 
-  public EventServiceImpl(EventRepository eventRepository)
+  public EventServiceImpl(EventRepository eventRepository, Validator validator)
   {
     this.eventRepository = eventRepository;
+    this.validator = validator;
   }
 
+
   @Override
-  public List<Event> getAllEvents()
+  public List<Event> findUpcomingEvents()
   {
-    return eventRepository.getAllEvents();
+    return eventRepository.findByTimeOfTheEventAfter(LocalDateTime.now());
   }
 
   @Override

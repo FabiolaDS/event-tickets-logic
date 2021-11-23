@@ -2,6 +2,7 @@ package com.eventtickets.logictier.controller;
 
 import com.eventtickets.logictier.model.CreditCard;
 import com.eventtickets.logictier.service.CreditCardService;
+import com.eventtickets.logictier.service.dto.CreateCardDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
@@ -24,7 +25,7 @@ public class MessageQueueCreditCardController {
 
             System.out.println("RECEIVED " + json);
 
-            CreditCard c = jsonSerializer.readValue(json, CreditCard.class);
+            CreateCardDTO c = jsonSerializer.readValue(json, CreateCardDTO.class);
 
             return jsonSerializer.writeValueAsString(cservice.addCreditCard(c));
 

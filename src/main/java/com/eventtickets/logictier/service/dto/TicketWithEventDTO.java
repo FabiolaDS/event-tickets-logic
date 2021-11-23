@@ -17,7 +17,6 @@ public class TicketWithEventDTO
     private LocalDateTime dateTimeOfEvent;
     private String location;
     private double price;
-    private int numberOfTickets;
     private String thumbnail;
 
 

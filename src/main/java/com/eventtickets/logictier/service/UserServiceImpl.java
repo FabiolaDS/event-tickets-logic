@@ -3,7 +3,6 @@ package com.eventtickets.logictier.service;
 import com.eventtickets.logictier.model.User;
 import com.eventtickets.logictier.network.UserRepository;
 import com.eventtickets.logictier.service.dto.LoginUserDTO;
-import com.eventtickets.logictier.service.dto.MakePaymentDTO;
 import com.eventtickets.logictier.service.dto.RegisterUserDTO;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
@@ -15,12 +14,12 @@ import java.util.Set;
 @Service public class UserServiceImpl implements UserService
 {
   private UserRepository userRepository;
-  @NonNull
   private Validator validator;
 
-  public UserServiceImpl(UserRepository userRepository)
+  public UserServiceImpl(UserRepository userRepository, Validator validator)
   {
     this.userRepository = userRepository;
+    this.validator = validator;
   }
 
   @Override public User registerUser(RegisterUserDTO userDto)

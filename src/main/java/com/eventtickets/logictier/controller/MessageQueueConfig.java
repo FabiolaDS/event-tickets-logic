@@ -18,16 +18,16 @@ public class MessageQueueConfig {
 
 
     @Bean
-    public Queue getAllEventsQueue() {
-        return new Queue("getAllEvents");
+    public Queue getUpcomingEventsQueue() {
+        return new Queue("getUpcomingEvents");
     }
 
     @Bean
-    public Binding getAllEventsBinding(DirectExchange logicTierExchange, Queue getAllEventsQueue) {
+    public Binding getUpcomingEventsBinding(DirectExchange logicTierExchange, Queue getUpcomingEventsQueue) {
         return BindingBuilder
-                .bind(getAllEventsQueue)
+                .bind(getUpcomingEventsQueue)
                 .to(logicTierExchange)
-                .with("getAllEvents");
+                .with("getUpcomingEvents");
     }
 
     @Bean
@@ -150,19 +150,7 @@ public class MessageQueueConfig {
                 .with("getCreditCards");
     }
 
-    @Bean
-    public Queue makePaymentQueue()
-    {
-        return new Queue("makePayment");
-    }
-    @Bean
-    public Binding makePaymentBinding(DirectExchange logicTierExchange, Queue makePaymentQueue)
-    {
-        return BindingBuilder
-                .bind(makePaymentQueue)
-                .to(logicTierExchange)
-                .with("makePayment");
-    }
+
 
     @Bean
     public Queue findPaymentForTicketQueue()

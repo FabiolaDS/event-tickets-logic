@@ -18,10 +18,10 @@ public class MessageQueueEventController {
     @NonNull
     private ObjectMapper jsonSerializer;
 
-    @RabbitListener(queues = "getAllEvents")
-    public String getAllEvents() {
+    @RabbitListener(queues = "getUpcomingEvents")
+    public String getUpcomingEvents() {
         try {
-            return jsonSerializer.writeValueAsString(service.getAllEvents());
+            return jsonSerializer.writeValueAsString(service.findUpcomingEvents());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -2,6 +2,7 @@ package com.eventtickets.logictier.service;
 
 import com.eventtickets.logictier.model.CreditCard;
 import com.eventtickets.logictier.network.CreditCardRepository;
+import com.eventtickets.logictier.service.dto.CreateCardDTO;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,16 +24,21 @@ public class CreditCardServiceImpl implements CreditCardService
   private CreditCardRepository creditCardRepository;
 
   @Override
-  public CreditCard addCreditCard(CreditCard creditCard)
+  public CreditCard addCreditCard(CreateCardDTO creditCardDto)
   {
-    Set<ConstraintViolation<CreditCard>> violations = validator
-        .validate(creditCard);
-    for (ConstraintViolation<CreditCard> violation : violations)
+    Set<ConstraintViolation<CreateCardDTO>> violations = validator
+        .validate(creditCardDto);
+    for (ConstraintViolation<CreateCardDTO> violation : violations)
     {
       throw new IllegalArgumentException(violation.getMessage());
     }
 
-    return creditCardRepository.createCreditCard(creditCard);
+    CreditCard creditCard = new CreditCard(null, creditCardDto.getCardNumber(),
+        creditCardDto.getExpiryMonth(), creditCardDto.getExpiryYear(),
+        creditCardDto.getCvv(), creditCardDto.getCardOwnerName());
+
+    return creditCardRepository
+        .createCreditCard(creditCardDto.getOwnerId(), creditCard);
   }
 
   @Override

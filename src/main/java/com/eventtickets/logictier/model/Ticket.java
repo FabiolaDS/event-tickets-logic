@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ticket {
-
-    private Long buyerId;
-    private Long eventId;
-    private String ticketNr;
-    private int nrOfTickets;
-
+public class Ticket
+{
+  private String ticketNr;
+  private long eventId;
+  private long paymentId;
 }

@@ -18,8 +18,8 @@ public class RestCreditCardRepository extends RestRepository implements CreditCa
     }
 
     @Override
-    public CreditCard createCreditCard(CreditCard creditCard) {
-         return rest().postForObject(url(), creditCard,CreditCard.class);
+    public CreditCard createCreditCard(long userId, CreditCard creditCard) {
+         return rest().postForObject(url(userId), creditCard,CreditCard.class);
 
     }
 
