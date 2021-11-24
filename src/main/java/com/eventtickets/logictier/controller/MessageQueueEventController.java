@@ -8,19 +8,33 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class MessageQueueEventController
 	extends AbstractMessageQueueController {
 
 	@NonNull
 	private EventService service;
 
+	public MessageQueueEventController(
+		@NonNull RabbitTemplate rabbit,
+		@NonNull ObjectMapper jsonSerializer,
+		@Value("${eventTicket.mq.dlx-name}") String dlx, EventService service) {
+		super(rabbit, jsonSerializer, dlx);
+		this.service = service;
+	}
+
 	@RabbitListener(queues = "getUpcomingEvents")
 	public void getUpcomingEvents(Message request) {
-		succeed(request, service.findUpcomingEvents());
+		try {
+			succeed(request, serialize(service.findUpcomingEvents()));
+		}
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@RabbitListener(queues = "addEvent")
@@ -28,11 +42,19 @@ public class MessageQueueEventController
 		try {
 			Event e = deserialize(request.getBody(), Event.class);
 
-			succeed(request, service.addEvent(e));
+			succeed(request, serialize(service.addEvent(e)));
 
 		}
 		catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
+		}
+		catch (IllegalArgumentException e) {
+			try {
+				fail(request, serialize(e.getMessage()));
+			}
+			catch (JsonProcessingException ex) {
+				throw new RuntimeException(ex);
+			}
 		}
 	}
 
@@ -41,11 +63,19 @@ public class MessageQueueEventController
 
 		try {
 			long eventId = deserialize(request.getBody(), Long.class);
-			succeed(request, service.getById(eventId));
+			succeed(request, serialize(service.getById(eventId)));
 		}
 		catch (JsonProcessingException e) {
 
 			throw new RuntimeException(e);
+		}
+		catch (IllegalArgumentException e) {
+			try {
+				fail(request, serialize(e.getMessage()));
+			}
+			catch (JsonProcessingException ex) {
+				throw new RuntimeException(ex);
+			}
 		}
 	}
 }

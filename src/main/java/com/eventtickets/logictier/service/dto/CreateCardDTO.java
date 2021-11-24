@@ -16,7 +16,7 @@ public class CreateCardDTO
   @CreditCardNumber
   private String cardNumber;
   @Min(value = 1, message = "Expiry month should be higher than 1")
-  @Max(value = 12, message = "Expiry month should not be higher than 12")
+  @Max(value = 13, message = "Expiry month should not be higher than 12")
   private int expiryMonth;
   @Min(2000)
   private int expiryYear;

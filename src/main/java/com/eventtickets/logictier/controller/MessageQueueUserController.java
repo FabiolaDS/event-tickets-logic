@@ -19,11 +19,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class MessageQueueUserController extends AbstractMessageQueueController {
 
 	@NonNull
 	private UserService service;
+
+	public MessageQueueUserController(
+		@NonNull RabbitTemplate rabbit,
+		@NonNull ObjectMapper jsonSerializer,  @Value("${eventTicket.mq.dlx-name}") String dlx, UserService service) {
+		super(rabbit, jsonSerializer, dlx);
+		this.service = service;
+	}
 
 	@RabbitListener(queues = "registerUser")
 	public void registerUser(Message request) {
@@ -34,15 +40,19 @@ public class MessageQueueUserController extends AbstractMessageQueueController {
 					RegisterUserDTO.class);
 			User userCreated = service.registerUser(userDto);
 
-			succeed(request, userCreated);
+			succeed(request, serialize(userCreated));
 
 		}
 		catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}
 		catch (IllegalArgumentException e) {
-
-			fail(request, e.getMessage().getBytes());
+			try {
+				fail(request, serialize(e.getMessage()));
+			}
+			catch (JsonProcessingException ex) {
+				throw new RuntimeException(ex);
+			}
 		}
 	}
 

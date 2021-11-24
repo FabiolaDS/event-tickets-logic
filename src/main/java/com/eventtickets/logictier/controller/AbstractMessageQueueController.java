@@ -3,6 +3,7 @@ package com.eventtickets.logictier.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
@@ -10,6 +11,7 @@ import org.springframework.amqp.core.MessagePropertiesBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 
+@RequiredArgsConstructor
 public abstract class AbstractMessageQueueController {
 	@NonNull
 	private RabbitTemplate rabbit;
@@ -17,7 +19,7 @@ public abstract class AbstractMessageQueueController {
 	@NonNull
 	private ObjectMapper jsonSerializer;
 
-	@Value("${eventTicket.mq.dlx-name}")
+	@NonNull
 	private String dlx;
 
 	protected void respond(String exchange, String routingKey, Message request,
@@ -35,25 +37,20 @@ public abstract class AbstractMessageQueueController {
 
 		rabbit.send(exchange, routingKey, responseMsg);
 
+		System.out.format("SENT %s TO %s/%s\n",
+			new String(response),
+			exchange, routingKey);
 	}
 
-	protected void succeed(Message request, Object response) {
-		try {
-			respond("",
-				request.getMessageProperties().getReplyTo(),
-				request,
-				serialize(response));
-		} catch(JsonProcessingException ex) {
-			fail(request, ex.getMessage());
-		}
+	protected void succeed(Message request, byte[] response) {
+		respond("",
+			request.getMessageProperties().getReplyTo(),
+			request,
+			response);
 	}
 
-	protected void fail(Message request, Object response) {
-		try {
-			respond(dlx, "", request, serialize(response));
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
-		}
+	protected void fail(Message request, byte[] response) {
+		respond(dlx, "", request, response);
 	}
 
 	protected <T> T deserialize(byte[] arr, Class<T> target)
