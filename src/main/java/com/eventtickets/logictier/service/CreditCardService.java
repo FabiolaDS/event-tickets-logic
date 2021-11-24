@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CreditCardService {
     CreditCard addCreditCard(CreateCardDTO creditCardDto);
-    void removeCreditCard(CreditCard creditCard);
+    void removeCreditCard(long id);
     List<CreditCard> getCreditCardsForUser(long ownerId);
 
 }
