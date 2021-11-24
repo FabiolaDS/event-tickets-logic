@@ -8,184 +8,164 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessageQueueConfig {
 
-	@Bean
-	public DirectExchange logicTierExchange(
-		@Value("${eventTicket.mq.exchange-name}") String exchangeName) {
-		return new DirectExchange(exchangeName);
-	}
+    @Bean
+    public DirectExchange logicTierExchange(@Value("${eventTicket.mq.exchange-name}") String exchangeName) {
+        return new DirectExchange(exchangeName);
+    }
 
-	@Bean
-	public FanoutExchange deadLetterExchange(
-		@Value("${eventTicket.mq.dlx-name}") String dlx) {
-		return new FanoutExchange(dlx);
-	}
+    @Bean
+    public FanoutExchange deadLetterExchange(@Value("${eventTicket.mq.dlx-name}") String dlx) {
+        return new FanoutExchange(dlx);
+    }
 
-	@Bean
-	public Queue getUpcomingEventsQueue() {
-		return new Queue("getUpcomingEvents");
-	}
 
-	@Bean
-	public Binding getUpcomingEventsBinding(DirectExchange logicTierExchange,
-		Queue getUpcomingEventsQueue) {
-		return BindingBuilder
-			.bind(getUpcomingEventsQueue)
-			.to(logicTierExchange)
-			.with("getUpcomingEvents");
-	}
+    @Bean
+    public Queue getUpcomingEventsQueue() {
+        return new Queue("getUpcomingEvents");
+    }
 
-	@Bean
-	public Queue addEventQueue() {
-		return new Queue("addEvent");
-	}
+    @Bean
+    public Binding getUpcomingEventsBinding(DirectExchange logicTierExchange, Queue getUpcomingEventsQueue) {
+        return BindingBuilder
+                .bind(getUpcomingEventsQueue)
+                .to(logicTierExchange)
+                .with("getUpcomingEvents");
+    }
 
-	@Bean
-	public Binding addEventBinding(DirectExchange logicTierExchange,
-		Queue addEventQueue) {
-		return BindingBuilder
-			.bind(addEventQueue)
-			.to(logicTierExchange)
-			.with("addEvent");
-	}
+    @Bean
+    public Queue addEventQueue() {
+        return new Queue("addEvent");
+    }
 
-	@Bean
-	public Queue registerUserQueue() {
-		return new Queue("registerUser");
-	}
+    @Bean
+    public Binding addEventBinding(DirectExchange logicTierExchange, Queue addEventQueue) {
+        return BindingBuilder
+                .bind(addEventQueue)
+                .to(logicTierExchange)
+                .with("addEvent");
+    }
 
-	@Bean
-	public Binding registerUserBinding(DirectExchange logicTierExchange,
-		Queue registerUserQueue) {
-		return BindingBuilder
-			.bind(registerUserQueue)
-			.to(logicTierExchange)
-			.with("registerUser");
-	}
+    @Bean
+    public Queue registerUserQueue() {
+        return new Queue("registerUser");
+    }
 
-	@Bean
-	public Queue loginUserQueue() {
-		return new Queue("loginUser");
-	}
+    @Bean
+    public Binding registerUserBinding(DirectExchange logicTierExchange, Queue registerUserQueue) {
+        return BindingBuilder
+                .bind(registerUserQueue)
+                .to(logicTierExchange)
+                .with("registerUser");
+    }
 
-	@Bean
-	public Binding loginUserBinding(DirectExchange logicTierExchange,
-		Queue loginUserQueue) {
-		return BindingBuilder
-			.bind(loginUserQueue)
-			.to(logicTierExchange)
-			.with("loginUser");
-	}
 
-	@Bean
-	public Queue updateUserQueue() {
-		return new Queue("updateUser");
-	}
+    @Bean
+    public Queue loginUserQueue() {
+        return new Queue("loginUser");
+    }
 
-	@Bean
-	public Binding updateUserBinding(DirectExchange logicTierExchange,
-		Queue updateUserQueue) {
-		return BindingBuilder
-			.bind(updateUserQueue)
-			.to(logicTierExchange)
-			.with("updateUser");
-	}
+    @Bean
+    public Binding loginUserBinding(DirectExchange logicTierExchange, Queue loginUserQueue) {
+        return BindingBuilder
+                .bind(loginUserQueue)
+                .to(logicTierExchange)
+                .with("loginUser");
+    }
 
-	@Bean
-	public Queue bookTicketQueue() {
-		return new Queue("bookTicket");
-	}
+    @Bean
+    public Queue updateUserQueue() {
+        return new Queue("updateUser");
+    }
 
-	@Bean
-	public Binding bookTicketBinding(DirectExchange logicTierExchange,
-		Queue bookTicketQueue) {
-		return BindingBuilder
-			.bind(bookTicketQueue)
-			.to(logicTierExchange)
-			.with("bookTicket");
-	}
+    @Bean
+    public Binding updateUserBinding(DirectExchange logicTierExchange, Queue updateUserQueue) {
+        return BindingBuilder
+                .bind(updateUserQueue)
+                .to(logicTierExchange)
+                .with("updateUser");
+    }
 
-	@Bean
-	public Queue getTicketsForUserQueue() {
-		return new Queue("getTicketsForUser");
-	}
+    @Bean
+    public Queue bookTicketQueue() {
+        return new Queue("bookTicket");
+    }
 
-	@Bean
-	public Binding getTicketsForUserBinding(DirectExchange logicTierExchange,
-		Queue getTicketsForUserQueue) {
-		return BindingBuilder
-			.bind(getTicketsForUserQueue)
-			.to(logicTierExchange)
-			.with("getTicketsForUser");
-	}
+    @Bean
+    public Binding bookTicketBinding(DirectExchange logicTierExchange, Queue bookTicketQueue) {
+        return BindingBuilder
+                .bind(bookTicketQueue)
+                .to(logicTierExchange)
+                .with("bookTicket");
+    }
 
-	@Bean
-	public Queue getEventByIdQueue() {
-		return new Queue("getEventById");
-	}
 
-	@Bean
-	public Binding getEventByIdBinding(DirectExchange logicTierExchange,
-		Queue getEventByIdQueue) {
-		return BindingBuilder
-			.bind(getEventByIdQueue)
-			.to(logicTierExchange)
-			.with("getEventById");
-	}
+    @Bean
+    public Queue getTicketsForUserQueue() {
+        return new Queue("getTicketsForUser");
+    }
 
-	@Bean
-	public Queue addCreditCardQueue() {
-		return new Queue("addCreditCard");
-	}
+    @Bean
+    public Binding getTicketsForUserBinding(DirectExchange logicTierExchange, Queue getTicketsForUserQueue) {
+        return BindingBuilder
+                .bind(getTicketsForUserQueue)
+                .to(logicTierExchange)
+                .with("getTicketsForUser");
+    }
 
-	@Bean
-	public Binding addCreditCardBinding(DirectExchange logicTierExchange,
-		Queue addCreditCardQueue) {
-		return BindingBuilder
-			.bind(addCreditCardQueue)
-			.to(logicTierExchange)
-			.with("addCreditCard");
-	}
 
-	@Bean
-	public Queue getCreditCardsForUserQueue() {
-		return new Queue("getCreditCards");
-	}
+    @Bean
+    public Queue getEventByIdQueue() {
+        return new Queue("getEventById");
+    }
 
-	@Bean
-	public Binding getCreditCardsBinding(DirectExchange logicTierExchange,
-		Queue getCreditCardsForUserQueue) {
-		return BindingBuilder
-			.bind(getCreditCardsForUserQueue)
-			.to(logicTierExchange)
-			.with("getCreditCards");
-	}
+    @Bean
+    public Binding getEventByIdBinding(DirectExchange logicTierExchange, Queue getEventByIdQueue) {
+        return BindingBuilder
+                .bind(getEventByIdQueue)
+                .to(logicTierExchange)
+                .with("getEventById");
+    }
 
-	@Bean
-	public Queue findPaymentForTicketQueue() {
-		return new Queue("findPaymentForTicket");
-	}
+    @Bean
+    public Queue addCreditCardQueue() {
+        return new Queue("addCreditCard");
+    }
 
-	@Bean
-	public Binding findPaymentForTicketBinding(DirectExchange logicTierExchange,
-		Queue findPaymentForTicketQueue) {
-		return BindingBuilder
-			.bind(findPaymentForTicketQueue)
-			.to(logicTierExchange)
-			.with("findPaymentForTicket");
-	}
+    @Bean
+    public Binding addCreditCardBinding(DirectExchange logicTierExchange, Queue addCreditCardQueue) {
+        return BindingBuilder
+                .bind(addCreditCardQueue)
+                .to(logicTierExchange)
+                .with("addCreditCard");
+    }
 
-	@Bean
-	public Queue removeCreditCardQueue() {
-		return new Queue("removeCreditCard");
-	}
+    @Bean
+    public Queue getCreditCardsForUserQueue()
+    {
+        return new Queue("getCreditCards");
+    }
+    @Bean
+    public Binding getCreditCardsBinding(DirectExchange logicTierExchange, Queue getCreditCardsForUserQueue) {
+        return BindingBuilder
+                .bind(getCreditCardsForUserQueue)
+                .to(logicTierExchange)
+                .with("getCreditCards");
+    }
 
-	@Bean
-	public Binding removeCreditCardBinding(DirectExchange logicTierExchange,
-		Queue removeCreditCardQueue) {
-		return BindingBuilder
-			.bind(removeCreditCardQueue)
-			.to(logicTierExchange)
-			.with("removeCreditCard");
-	}
+
+
+    @Bean
+    public Queue findPaymentForTicketQueue()
+    {
+        return new Queue("findPaymentForTicket");
+    }
+    @Bean
+    public Binding findPaymentForTicketBinding(DirectExchange logicTierExchange, Queue findPaymentForTicketQueue)
+    {
+        return BindingBuilder
+                .bind(findPaymentForTicketQueue)
+                .to(logicTierExchange)
+                .with("findPaymentForTicket");
+    }
 
 }

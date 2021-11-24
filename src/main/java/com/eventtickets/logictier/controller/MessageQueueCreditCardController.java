@@ -70,27 +70,6 @@ public class MessageQueueCreditCardController
 			}
 		}
 	}
-
-	@RabbitListener(queues = "removeCreditCard")
-	public void removeCreditCard(Message request) {
-		try {
-			long creditCardId = deserialize(request.getBody(), Long.class);
-			cservice.removeCreditCard(creditCardId);
-			succeed(request, new byte[] {});
-		}
-		catch (JsonProcessingException e) {
-
-			throw new RuntimeException(e);
-		}
-		catch (IllegalArgumentException e) {
-			try {
-				fail(request, serialize(e.getMessage()));
-			}
-			catch (JsonProcessingException ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-	}
 }
 
 
