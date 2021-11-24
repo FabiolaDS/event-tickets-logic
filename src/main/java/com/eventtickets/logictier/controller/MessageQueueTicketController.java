@@ -6,51 +6,41 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class MessageQueueTicketController
-{
+	extends AbstractMessageQueueController {
 
-  @NonNull
-  private TicketService service;
-  @NonNull
-  private ObjectMapper jsonSerializer;
+	@NonNull
+	private TicketService service;
 
-  @RabbitListener(queues = "bookTicket")
-  public String bookTicket(byte[] bytes)
-  {
-    try
-    {
-      String json = new String(bytes);
+	@RabbitListener(queues = "bookTicket")
+	public void bookTicket(Message request) {
+		try {
 
-      System.out.println("TICKET " + json);
+			BookTicketDTO t = deserialize(request.getBody(),
+				BookTicketDTO.class);
 
-      BookTicketDTO t = jsonSerializer.readValue(json, BookTicketDTO.class);
+			succeed(request, service.bookTickets(t));
+		}
 
-      return jsonSerializer.writeValueAsString(service.bookTickets(t));
-    }
-    catch (Exception e)
-    {
-      throw new RuntimeException(e);
-    }
-  }
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-  @RabbitListener(queues = "getTicketsForUser")
-  public String getTicketsForUser(byte[] bytes)
-  {
-    long userId = Long.parseLong(new String(bytes));
-    try
-    {
-      return jsonSerializer
-          .writeValueAsString(service.getTicketsForUser(userId));
-    }
-    catch (JsonProcessingException e)
-    {
-
-      throw new RuntimeException(e);
-    }
-  }
+	@RabbitListener(queues = "getTicketsForUser")
+	public void getTicketsForUser(Message request) {
+		try {
+			long userId = deserialize(request.getBody(), Long.class);
+			succeed(request, service.getTicketsForUser(userId));
+		}
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

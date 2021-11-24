@@ -7,43 +7,43 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class MessageQueueCreditCardController {
-    @NonNull
-    private CreditCardService cservice;
-    @NonNull
-    private ObjectMapper jsonSerializer;
+public class MessageQueueCreditCardController
+	extends AbstractMessageQueueController {
+	@NonNull
+	private CreditCardService cservice;
 
-    @RabbitListener(queues = "addCreditCard")
-    public String addCreditCard(byte[] bytes) {
-        try {
-            String json = new String(bytes);
+	@RabbitListener(queues = "addCreditCard")
+	public void addCreditCard(Message request) {
+		try {
+			CreateCardDTO c = deserialize(request.getBody(),
+				CreateCardDTO.class);
 
-            System.out.println("RECEIVED " + json);
+			succeed(request, cservice.addCreditCard(c));
 
-            CreateCardDTO c = jsonSerializer.readValue(json, CreateCardDTO.class);
+		}
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-            return jsonSerializer.writeValueAsString(cservice.addCreditCard(c));
+	@RabbitListener(queues = "getCreditCards")
+	public void getCreditCardsForUser(Message request) {
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+		try {
+			long userId = deserialize(request.getBody(), Long.class);
+			succeed(request, cservice.getCreditCardsForUser(userId));
+		}
+		catch (JsonProcessingException e) {
 
-    @RabbitListener(queues = "getCreditCards")
-    public String getCreditCardsForUser(byte[] bytes) {
-        long userId = Long.parseLong(new String(bytes));
-        try {
-            return jsonSerializer.writeValueAsString(cservice.getCreditCardsForUser(userId));
-        } catch (JsonProcessingException e) {
-
-            throw new RuntimeException(e);
-        }
-    }
+			throw new RuntimeException(e);
+		}
+	}
 }
 
 

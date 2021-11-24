@@ -6,48 +6,46 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class MessageQueueEventController {
+public class MessageQueueEventController
+	extends AbstractMessageQueueController {
 
-    @NonNull
-    private EventService service;
-    @NonNull
-    private ObjectMapper jsonSerializer;
+	@NonNull
+	private EventService service;
 
-    @RabbitListener(queues = "getUpcomingEvents")
-    public String getUpcomingEvents() {
-        try {
-            return jsonSerializer.writeValueAsString(service.findUpcomingEvents());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+	@RabbitListener(queues = "getUpcomingEvents")
+	public void getUpcomingEvents(Message request) {
+		succeed(request, service.findUpcomingEvents());
+	}
 
-    @RabbitListener(queues = "addEvent")
-    public String addEvent(byte[] bytes) {
-        try {
-            String json = new String(bytes);
-            Event e = jsonSerializer.readValue(json, Event.class);
+	@RabbitListener(queues = "addEvent")
+	public void addEvent(Message request) {
+		try {
+			Event e = deserialize(request.getBody(), Event.class);
 
-            return jsonSerializer.writeValueAsString(service.addEvent(e));
+			succeed(request, service.addEvent(e));
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+		}
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    @RabbitListener(queues = "getEventById")
-    public String getEventById(byte[] bytes) {
-        long eventId = Long.parseLong(new String(bytes));
-        try {
-            return jsonSerializer.writeValueAsString(service.getById(eventId));
-        } catch (JsonProcessingException e) {
+	@RabbitListener(queues = "getEventById")
+	public void getEventById(Message request) {
 
-            throw new RuntimeException(e);
-        }
-    }
+		try {
+			long eventId = deserialize(request.getBody(), Long.class);
+			succeed(request, service.getById(eventId));
+		}
+		catch (JsonProcessingException e) {
+
+			throw new RuntimeException(e);
+		}
+	}
 }

@@ -1,9 +1,6 @@
 package com.eventtickets.logictier.controller;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +11,11 @@ public class MessageQueueConfig {
     @Bean
     public DirectExchange logicTierExchange(@Value("${eventTicket.mq.exchange-name}") String exchangeName) {
         return new DirectExchange(exchangeName);
+    }
+
+    @Bean
+    public FanoutExchange deadLetterExchange(@Value("${eventTicket.mq.dlx-name}") String dlx) {
+        return new FanoutExchange(dlx);
     }
 
 
