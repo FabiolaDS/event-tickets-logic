@@ -202,4 +202,32 @@ public class MessageQueueConfig {
 			.with("cancelEvent");
 	}
 
+	@Bean
+	public Queue createCategoryQueue() {
+		return new Queue("createCategory");
+	}
+
+	@Bean
+	public Binding createCategoryBinding(DirectExchange logicTierExchange,
+		Queue createCategoryQueue) {
+		return BindingBuilder
+			.bind(createCategoryQueue)
+			.to(logicTierExchange)
+			.with("createCategory");
+	}
+
+	@Bean
+	public Queue getAllCategoriesQueue() {
+		return new Queue("getAllCategories");
+	}
+
+	@Bean
+	public Binding getAllCategoriesBinding(DirectExchange logicTierExchange,
+		Queue getAllCategoriesQueue) {
+		return BindingBuilder
+			.bind(getAllCategoriesQueue)
+			.to(logicTierExchange)
+			.with("getAllCategories");
+	}
+
 }

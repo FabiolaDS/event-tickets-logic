@@ -91,10 +91,10 @@ public class MessageQueueUserController extends AbstractMessageQueueController {
 
 			succeed(request, serialize(updateUser));
 		}
-		catch (JsonMappingException e) {
+		catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}
-		catch (JsonProcessingException e) {
+		catch (IllegalArgumentException e) {
 			try {
 				fail(request, serialize(e.getMessage()));
 			}

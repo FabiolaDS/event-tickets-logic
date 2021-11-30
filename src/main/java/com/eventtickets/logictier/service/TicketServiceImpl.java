@@ -40,6 +40,11 @@ public class TicketServiceImpl implements TicketService {
 			throw new IllegalArgumentException("Not enough remaining tickets");
 		}
 
+		if (event.getIsCancelled())
+		{
+			throw new IllegalArgumentException("The event was cancelled");
+		}
+
 		List<Ticket> tickets = new ArrayList<>();
 		for (int i = 0; i < bookTicket.getNoOfTickets(); i++) {
 
