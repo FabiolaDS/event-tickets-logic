@@ -34,6 +34,12 @@ public class TicketServiceImpl implements TicketService {
 			throw new IllegalArgumentException(violation.getMessage());
 		}
 
+		Event event = eventService.getById(bookTicket.getEventId());
+		if (bookTicket.getNoOfTickets() > event.getAvailableTickets() - event
+			.getBookedTickets()) {
+			throw new IllegalArgumentException("Not enough remaining tickets");
+		}
+
 		List<Ticket> tickets = new ArrayList<>();
 		for (int i = 0; i < bookTicket.getNoOfTickets(); i++) {
 
@@ -42,7 +48,8 @@ public class TicketServiceImpl implements TicketService {
 				bookTicket.getEventId(),
 				bookTicket.getPaymentId());
 
-			ticket = ticketRepository.createTicket(bookTicket.getBuyerId(), ticket);
+			ticket = ticketRepository
+				.createTicket(bookTicket.getBuyerId(), ticket);
 			tickets.add(ticket);
 		}
 
