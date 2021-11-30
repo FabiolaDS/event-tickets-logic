@@ -35,7 +35,7 @@ public class User
     this.email = email;
     this.fullName = fullName;
     this.password = password;
-    this.admin = true;
+    this.admin = false;
   }
 
 }
