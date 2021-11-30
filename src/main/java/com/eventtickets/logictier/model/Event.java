@@ -10,7 +10,6 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 
-import org.hibernate.validator.*;
 import org.hibernate.validator.constraints.URL;
 
 @Data

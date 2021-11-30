@@ -15,61 +15,55 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MessageQueueCreditCardController
-	extends AbstractMessageQueueController {
-	@NonNull
-	private CreditCardService cservice;
+        extends AbstractMessageQueueController {
+    @NonNull
+    private CreditCardService cservice;
 
-	public MessageQueueCreditCardController(
-		@NonNull RabbitTemplate rabbit,
-		@NonNull ObjectMapper jsonSerializer,
-		@Value("${eventTicket.mq.dlx-name}") String dlx,
-		CreditCardService service) {
-		super(rabbit, jsonSerializer, dlx);
-		this.cservice = service;
-	}
+    public MessageQueueCreditCardController(
+            @NonNull RabbitTemplate rabbit,
+            @NonNull ObjectMapper jsonSerializer,
+            @Value("${eventTicket.mq.dlx-name}") String dlx,
+            CreditCardService service) {
 
-	@RabbitListener(queues = "addCreditCard")
-	public void addCreditCard(Message request) {
-		try {
-			CreateCardDTO c = deserialize(request.getBody(),
-				CreateCardDTO.class);
+        super(rabbit, jsonSerializer, dlx);
+        this.cservice = service;
+    }
 
-			succeed(request, serialize(cservice.addCreditCard(c)));
+    @RabbitListener(queues = "addCreditCard")
+    public void addCreditCard(Message request) {
+        try {
+            CreateCardDTO c = deserialize(request.getBody(),
+                    CreateCardDTO.class);
 
-		}
-		catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
-		}
-		catch (IllegalArgumentException e) {
-			try {
-				fail(request, serialize(e.getMessage()));
-			}
-			catch (JsonProcessingException ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-	}
+            succeed(request, serialize(cservice.addCreditCard(c)));
 
-	@RabbitListener(queues = "getCreditCards")
-	public void getCreditCardsForUser(Message request) {
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            try {
+                fail(request, serialize(e.getMessage()));
+            } catch (JsonProcessingException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
 
-		try {
-			long userId = deserialize(request.getBody(), Long.class);
-			succeed(request, serialize(cservice.getCreditCardsForUser(userId)));
-		}
-		catch (JsonProcessingException e) {
+    @RabbitListener(queues = "getCreditCards")
+    public void getCreditCardsForUser(Message request) {
+        try {
+            long userId = deserialize(request.getBody(), Long.class);
+            succeed(request, serialize(cservice.getCreditCardsForUser(userId)));
+        } catch (JsonProcessingException e) {
 
-			throw new RuntimeException(e);
-		}
-		catch (IllegalArgumentException e) {
-			try {
-				fail(request, serialize(e.getMessage()));
-			}
-			catch (JsonProcessingException ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-	}
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            try {
+                fail(request, serialize(e.getMessage()));
+            } catch (JsonProcessingException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
 }
 
 

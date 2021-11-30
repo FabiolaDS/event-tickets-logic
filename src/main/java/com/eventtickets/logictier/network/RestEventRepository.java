@@ -19,11 +19,9 @@ public class RestEventRepository extends RestRepository implements EventReposito
     }
 
     @Override
-    public List<Event> findByTimeOfTheEventAfter(LocalDateTime localDateTime)
-    {
+    public List<Event> findByTimeOfTheEventAfter(LocalDateTime localDateTime) {
         ResponseEntity<List<Event>> response = rest().exchange(url("?after=" + localDateTime),
-            HttpMethod.GET, null, new ParameterizedTypeReference<List<Event>>() {
-            });
+                HttpMethod.GET, null, new ParameterizedTypeReference<List<Event>>() {});
 
         return response.getBody();
     }
