@@ -10,5 +10,6 @@ public interface EventRepository
   List<Event> findByTimeOfTheEventAfter(LocalDateTime localDateTime);
  Event getEventById(Long id);
   Event addEvent(Event event);
+  Event updateEvent(Long id, Event event);
 
 }

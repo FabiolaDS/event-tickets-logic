@@ -78,4 +78,43 @@ public class MessageQueueEventController
 			}
 		}
 	}
+
+	@RabbitListener(queues = "updateEvent")
+	public void updateEvent(Message request) {
+		try {
+			Event event = deserialize(request.getBody(), Event.class);
+			succeed(request, serialize(service.updateEvent(event)));
+
+		}
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+		catch (IllegalArgumentException e) {
+			try {
+				fail(request, serialize(e.getMessage()));
+			}
+			catch (JsonProcessingException ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+	}
+
+	@RabbitListener(queues = "cancelEvent")
+	public void cancelEvent(Message request) {
+		try {
+			long eventId = deserialize(request.getBody(), Long.class);
+			succeed(request, serialize(service.cancelEvent(eventId)));
+		}
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+		catch (IllegalArgumentException e) {
+			try {
+				fail(request, serialize(e.getMessage()));
+			}
+			catch (JsonProcessingException ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+	}
 }

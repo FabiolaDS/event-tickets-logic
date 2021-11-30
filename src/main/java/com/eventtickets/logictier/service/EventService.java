@@ -9,5 +9,7 @@ public interface EventService {
     List<Event> findUpcomingEvents();
     Event addEvent(Event event);
     Event getById(Long id);
+    Event updateEvent(Event event);
+    Event cancelEvent(Long eventId);
 
 }

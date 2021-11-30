@@ -12,28 +12,37 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
-public class RestEventRepository extends RestRepository implements EventRepository {
+public class RestEventRepository extends RestRepository
+	implements EventRepository {
 
-    public RestEventRepository(@Value("${eventTicket.data.url}") String dataUrl, RestTemplate restTemplate) {
-        super(restTemplate, dataUrl, "events");
-    }
+	public RestEventRepository(@Value("${eventTicket.data.url}") String dataUrl,
+		RestTemplate restTemplate) {
+		super(restTemplate, dataUrl, "events");
+	}
 
-    @Override
-    public List<Event> findByTimeOfTheEventAfter(LocalDateTime localDateTime) {
-        ResponseEntity<List<Event>> response = rest().exchange(url("?after=" + localDateTime),
-                HttpMethod.GET, null, new ParameterizedTypeReference<List<Event>>() {});
+	@Override
+	public List<Event> findByTimeOfTheEventAfter(LocalDateTime localDateTime) {
+		ResponseEntity<List<Event>> response = rest()
+			.exchange(url("?after=" + localDateTime),
+				HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<Event>>() {
+				});
 
-        return response.getBody();
-    }
+		return response.getBody();
+	}
 
+	@Override
+	public Event getEventById(Long id) {
+		return rest().getForObject(url(id), Event.class);
+	}
 
-    @Override
-    public Event getEventById(Long id) {
-        return rest().getForObject(url(id), Event.class);
-    }
+	@Override
+	public Event addEvent(Event event) {
+		return rest().postForObject(url(), event, Event.class);
+	}
 
-    @Override
-    public Event addEvent(Event event) {
-        return rest().postForObject(url(), event, Event.class);
-    }
+	@Override
+	public Event updateEvent(Long id, Event event) {
+		return rest().patchForObject(url(id), event, Event.class);
+	}
 }
