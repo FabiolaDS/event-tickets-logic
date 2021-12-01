@@ -7,6 +7,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
@@ -72,7 +73,12 @@ public class RestEventRepository extends RestRepository
 
 	@Override
 	public Event findByName(String name) {
-		return rest()
-			.getForObject(url("/byName?name={name}"), Event.class, name);
+		try {
+			return rest()
+				.getForObject(url("/byName?name={name}"), Event.class, name);
+		}
+		catch (HttpClientErrorException.NotFound e) {
+			return null;
+		}
 	}
 }
