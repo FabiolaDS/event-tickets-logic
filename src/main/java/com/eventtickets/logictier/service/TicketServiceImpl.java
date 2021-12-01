@@ -40,8 +40,7 @@ public class TicketServiceImpl implements TicketService {
 			throw new IllegalArgumentException("Not enough remaining tickets");
 		}
 
-		if (event.getIsCancelled())
-		{
+		if (event.getIsCancelled()) {
 			throw new IllegalArgumentException("The event was cancelled");
 		}
 
@@ -51,7 +50,7 @@ public class TicketServiceImpl implements TicketService {
 			String ticketNr = UUID.randomUUID().toString();
 			Ticket ticket = new Ticket(ticketNr,
 				bookTicket.getEventId(),
-				bookTicket.getPaymentId());
+				bookTicket.getPaymentId(), bookTicket.getBuyerId());
 
 			ticket = ticketRepository
 				.createTicket(bookTicket.getBuyerId(), ticket);

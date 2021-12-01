@@ -1,6 +1,7 @@
 package com.eventtickets.logictier.network;
 
 import com.eventtickets.logictier.model.Event;
+import com.eventtickets.logictier.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -54,6 +55,17 @@ public class RestEventRepository extends RestRepository
 			HttpMethod.GET, null,
 			new ParameterizedTypeReference<List<Event>>() {
 			}, id, localDateTime);
+
+		return response.getBody();
+	}
+
+	@Override
+	public List<User> getParticipants(long eventId) {
+		ResponseEntity<List<User>> response = rest().exchange(
+			url("{eventId}/participants"),
+			HttpMethod.GET, null,
+			new ParameterizedTypeReference<List<User>>() {
+			}, eventId);
 
 		return response.getBody();
 	}

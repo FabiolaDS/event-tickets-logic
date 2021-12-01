@@ -245,4 +245,34 @@ public class MessageQueueConfig {
 			.with("getUpcomingEventsByCategory");
 	}
 
+	@Bean
+	public Queue createNotificationQueue() {
+		return new Queue("createNotification");
+	}
+
+	@Bean
+	public Binding createNotificationBinding(
+		DirectExchange logicTierExchange,
+		Queue createNotificationQueue) {
+		return BindingBuilder
+			.bind(createNotificationQueue)
+			.to(logicTierExchange)
+			.with("createNotification");
+	}
+
+	@Bean
+	public Queue getNotificationsByUserQueue() {
+		return new Queue("getNotificationsByUser");
+	}
+
+	@Bean
+	public Binding getNotificationsByUserBinding(
+		DirectExchange logicTierExchange,
+		Queue getNotificationsByUserQueue) {
+		return BindingBuilder
+			.bind(getNotificationsByUserQueue)
+			.to(logicTierExchange)
+			.with("getNotificationsByUser");
+	}
+
 }

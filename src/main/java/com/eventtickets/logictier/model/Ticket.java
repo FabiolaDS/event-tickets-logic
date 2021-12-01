@@ -12,4 +12,5 @@ public class Ticket
   private String ticketNr;
   private long eventId;
   private long paymentId;
+  private long buyerId;
 }
