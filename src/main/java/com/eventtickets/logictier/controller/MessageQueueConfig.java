@@ -230,4 +230,19 @@ public class MessageQueueConfig {
 			.with("getAllCategories");
 	}
 
+	@Bean
+	public Queue getUpcomingEventsByCategoryQueue() {
+		return new Queue("getUpcomingEventsByCategory");
+	}
+
+	@Bean
+	public Binding getUpcomingEventsByCategoryBinding(
+		DirectExchange logicTierExchange,
+		Queue getUpcomingEventsByCategoryQueue) {
+		return BindingBuilder
+			.bind(getUpcomingEventsByCategoryQueue)
+			.to(logicTierExchange)
+			.with("getUpcomingEventsByCategory");
+	}
+
 }

@@ -45,4 +45,16 @@ public class RestEventRepository extends RestRepository
 	public Event updateEvent(Long id, Event event) {
 		return rest().patchForObject(url(id), event, Event.class);
 	}
+
+	@Override
+	public List<Event> findByCategoryIdAndTimeOfTheEventAfter(long id,
+		LocalDateTime localDateTime) {
+		ResponseEntity<List<Event>> response = rest().exchange(
+			url("byCategoryAndTime/?categoryId={id}&dateTime={dateTime}"),
+			HttpMethod.GET, null,
+			new ParameterizedTypeReference<List<Event>>() {
+			}, id, localDateTime);
+
+		return response.getBody();
+	}
 }

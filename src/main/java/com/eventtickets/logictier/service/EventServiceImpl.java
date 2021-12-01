@@ -57,4 +57,11 @@ public class EventServiceImpl implements EventService {
 		event.setIsCancelled(true);
 		return eventRepository.updateEvent(eventId, event);
 	}
+
+	@Override
+	public List<Event> findUpcomingEventsByCategory(long categoryId) {
+		return eventRepository
+			.findByCategoryIdAndTimeOfTheEventAfter(categoryId,
+				LocalDateTime.now());
+	}
 }
