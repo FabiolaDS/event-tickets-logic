@@ -69,4 +69,10 @@ public class RestEventRepository extends RestRepository
 
 		return response.getBody();
 	}
+
+	@Override
+	public Event findByName(String name) {
+		return rest()
+			.getForObject(url("/byName?name={name}"), Event.class, name);
+	}
 }

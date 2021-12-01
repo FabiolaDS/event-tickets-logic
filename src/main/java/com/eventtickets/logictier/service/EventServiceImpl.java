@@ -37,6 +37,11 @@ public class EventServiceImpl implements EventService {
 		for (ConstraintViolation<Event> violation : violations) {
 			throw new IllegalArgumentException(violation.getMessage());
 		}
+
+		if (eventRepository.findByName(event.getName()) != null) {
+			throw new IllegalArgumentException(
+				"The name of the event should be unique");
+		}
 		return eventRepository.addEvent(event);
 	}
 
