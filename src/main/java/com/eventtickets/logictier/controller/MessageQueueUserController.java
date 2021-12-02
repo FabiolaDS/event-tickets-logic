@@ -26,7 +26,8 @@ public class MessageQueueUserController extends AbstractMessageQueueController {
 
 	public MessageQueueUserController(
 		@NonNull RabbitTemplate rabbit,
-		@NonNull ObjectMapper jsonSerializer,  @Value("${eventTicket.mq.dlx-name}") String dlx, UserService service) {
+		@NonNull ObjectMapper jsonSerializer,
+		@Value("${eventTicket.mq.dlx-name}") String dlx, UserService service) {
 		super(rabbit, jsonSerializer, dlx);
 		this.service = service;
 	}
@@ -37,7 +38,7 @@ public class MessageQueueUserController extends AbstractMessageQueueController {
 		try {
 			RegisterUserDTO
 				userDto = deserialize(request.getBody(),
-					RegisterUserDTO.class);
+				RegisterUserDTO.class);
 			User userCreated = service.registerUser(userDto);
 
 			succeed(request, serialize(userCreated));
@@ -101,6 +102,35 @@ public class MessageQueueUserController extends AbstractMessageQueueController {
 			catch (JsonProcessingException ex) {
 				throw new RuntimeException(ex);
 			}
+		}
+	}
+
+	@RabbitListener(queues = "grantAdminPrivilege")
+	public void grantAdminPrivilege(Message request) {
+		try {
+			long userId = deserialize(request.getBody(), Long.class);
+			succeed(request, serialize(service.grantAdminPrivilege(userId)));
+		}
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+		catch (IllegalArgumentException e) {
+			try {
+				fail(request, serialize(e.getMessage()));
+			}
+			catch (JsonProcessingException ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+	}
+
+	@RabbitListener(queues = "getAllUsers")
+	public void getAllUsers(Message request) {
+		try {
+			succeed(request, serialize(service.getAllUsers()));
+		}
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

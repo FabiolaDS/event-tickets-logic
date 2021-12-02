@@ -275,4 +275,34 @@ public class MessageQueueConfig {
 			.with("getNotificationsByUser");
 	}
 
+	@Bean
+	public Queue grantAdminPrivilegeQueue() {
+		return new Queue("grantAdminPrivilege");
+	}
+
+	@Bean
+	public Binding grantAdminPrivilegeBinding(
+		DirectExchange logicTierExchange,
+		Queue grantAdminPrivilegeQueue) {
+		return BindingBuilder
+			.bind(grantAdminPrivilegeQueue)
+			.to(logicTierExchange)
+			.with("grantAdminPrivilege");
+	}
+
+	@Bean
+	public Queue getAllUsersQueue() {
+		return new Queue("getAllUsers");
+	}
+
+	@Bean
+	public Binding getAllUsersBinding(
+		DirectExchange logicTierExchange,
+		Queue getAllUsersQueue) {
+		return BindingBuilder
+			.bind(getAllUsersQueue)
+			.to(logicTierExchange)
+			.with("getAllUsers");
+	}
+
 }
