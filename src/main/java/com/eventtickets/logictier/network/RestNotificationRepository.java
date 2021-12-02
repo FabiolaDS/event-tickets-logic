@@ -8,6 +8,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -28,19 +29,30 @@ public class RestNotificationRepository extends RestRepository
 
 	@Override
 	public List<Notification> getNotificationsByUser(long userId) {
-		ResponseEntity<List<Notification>> response = rest()
-			.exchange(url("byUser", userId),
-				HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<Notification>>() {
-				});
+		try {
 
-		return response.getBody();
+			ResponseEntity<List<Notification>> response = rest()
+				.exchange(url("byUser", userId),
+					HttpMethod.GET, null,
+					new ParameterizedTypeReference<List<Notification>>() {
+					});
+
+			return response.getBody();
+		}
+		catch (HttpClientErrorException.NotFound e) {
+			return null;
+		}
 	}
 
 	@Override
 	public Notification addNotification(long notificationId, long userId) {
-		return rest().postForObject(
-			url("byUser/{userId}?notificationId={notificationId}"), null,
-			Notification.class, userId, notificationId);
+		try {
+			return rest().postForObject(
+				url("byUser/{userId}?notificationId={notificationId}"), null,
+				Notification.class, userId, notificationId);
+		}
+		catch (HttpClientErrorException.NotFound e) {
+			return null;
+		}
 	}
 }

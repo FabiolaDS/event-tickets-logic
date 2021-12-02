@@ -39,8 +39,14 @@ public class RestUserRepository extends RestRepository
 
 	@Override
 	public User updateUser(Long id, User user) {
-		return rest()
-			.patchForObject(url(id), user, User.class);
+		try {
+			return rest()
+				.patchForObject(url(id), user, User.class);
+		}
+
+		catch (HttpClientErrorException.NotFound e) {
+			return null;
+		}
 	}
 
 	@Override

@@ -35,7 +35,12 @@ public class RestEventRepository extends RestRepository
 
 	@Override
 	public Event getEventById(Long id) {
-		return rest().getForObject(url(id), Event.class);
+		try {
+			return rest().getForObject(url(id), Event.class);
+		}
+		catch (HttpClientErrorException.NotFound e) {
+			return null;
+		}
 	}
 
 	@Override
@@ -45,7 +50,12 @@ public class RestEventRepository extends RestRepository
 
 	@Override
 	public Event updateEvent(Long id, Event event) {
-		return rest().patchForObject(url(id), event, Event.class);
+		try {
+			return rest().patchForObject(url(id), event, Event.class);
+		}
+		catch (HttpClientErrorException.NotFound e) {
+			return null;
+		}
 	}
 
 	@Override
@@ -62,13 +72,19 @@ public class RestEventRepository extends RestRepository
 
 	@Override
 	public List<User> getParticipants(long eventId) {
-		ResponseEntity<List<User>> response = rest().exchange(
-			url("{eventId}/participants"),
-			HttpMethod.GET, null,
-			new ParameterizedTypeReference<List<User>>() {
-			}, eventId);
+		try {
+			ResponseEntity<List<User>> response = rest().exchange(
+				url("{eventId}/participants"),
+				HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<User>>() {
+				}, eventId);
 
-		return response.getBody();
+			return response.getBody();
+		}
+		catch (HttpClientErrorException.NotFound e) {
+			return null;
+		}
+
 	}
 
 	@Override
