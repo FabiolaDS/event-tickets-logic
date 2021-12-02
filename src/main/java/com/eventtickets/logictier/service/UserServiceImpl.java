@@ -33,10 +33,17 @@ public class UserServiceImpl implements UserService {
 		if (userRepository.findByEmail(userDto.getEmail()) != null) {
 			throw new IllegalArgumentException("Email address already in use");
 		}
+
 		User user = new User(
 			userDto.getEmail(),
 			userDto.getFullName(),
 			userDto.getPassword());
+
+		if (userRepository.getAllUsers().size() == 0)
+		{
+			user.setAdmin(true); // set the first registered user as an admin
+
+		}
 
 		return userRepository.createUser(user);
 	}
