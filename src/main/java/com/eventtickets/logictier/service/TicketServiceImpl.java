@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,7 +51,8 @@ public class TicketServiceImpl implements TicketService {
 			String ticketNr = UUID.randomUUID().toString();
 			Ticket ticket = new Ticket(ticketNr,
 				bookTicket.getEventId(),
-				bookTicket.getPaymentId(), bookTicket.getBuyerId());
+				bookTicket.getPaymentId(), bookTicket.getBuyerId(),
+				LocalDateTime.now());
 
 			ticket = ticketRepository
 				.createTicket(bookTicket.getBuyerId(), ticket);
