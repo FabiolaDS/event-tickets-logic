@@ -40,6 +40,7 @@ public class Event {
 
 	@PositiveOrZero(message = "The price cannot be negative")
 	private Double ticketPrice;
+	@NotBlank
 	private String category;
 	private Long organizerId;
 	private Integer bookedTickets;

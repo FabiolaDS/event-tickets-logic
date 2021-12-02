@@ -8,6 +8,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -34,5 +35,17 @@ public class RestCategoryRepository extends RestRepository
 				new ParameterizedTypeReference<List<Category>>() {
 				});
 		return response.getBody();
+	}
+
+	@Override
+	public Category findByName(String category) {
+		try {
+			return rest()
+				.getForObject(url("/byName?name={category}"), Category.class,
+					category);
+		}
+		catch (HttpClientErrorException.NotFound e) {
+			return null;
+		}
 	}
 }

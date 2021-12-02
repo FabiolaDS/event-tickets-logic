@@ -7,4 +7,5 @@ import java.util.List;
 public interface CategoryRepository {
 	Category createCategory(Category category);
 	List<Category> getAllCategories();
+	Category findByName(String category);
 }

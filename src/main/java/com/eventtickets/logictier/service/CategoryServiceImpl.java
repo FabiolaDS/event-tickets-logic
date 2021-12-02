@@ -10,6 +10,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.List;
 import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
@@ -25,6 +26,10 @@ public class CategoryServiceImpl implements CategoryService {
 			.validate(category);
 		for (ConstraintViolation<Category> violation : violations) {
 			throw new IllegalArgumentException(violation.getMessage());
+		}
+		Category c = categoryRepository.findByName(category.getName());
+		if (c != null) {
+			return c;
 		}
 		return categoryRepository.createCategory(category);
 	}
