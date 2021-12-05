@@ -87,4 +87,9 @@ public class EventServiceImpl implements EventService {
 				LocalDateTime.now());
 	}
 
+	@Override
+	public List<Event> findUpcomingEventsByLocation(String location) {
+		return eventRepository.findByLocationAndTimeOfTheEventAfter(location,
+			LocalDateTime.now());
+	}
 }

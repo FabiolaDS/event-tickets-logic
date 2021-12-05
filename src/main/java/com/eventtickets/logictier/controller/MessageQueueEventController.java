@@ -137,4 +137,24 @@ public class MessageQueueEventController
 			}
 		}
 	}
+
+	@RabbitListener(queues = "getUpcomingEventsByLocation")
+	public void getUpcomingEventsByLocation(Message request) {
+		try {
+			String location = deserialize(request.getBody(), String.class);
+			succeed(request,
+				serialize(service.findUpcomingEventsByLocation(location)));
+		}
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+		catch (IllegalArgumentException e) {
+			try {
+				fail(request, serialize(e.getMessage()));
+			}
+			catch (JsonProcessingException ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+	}
 }

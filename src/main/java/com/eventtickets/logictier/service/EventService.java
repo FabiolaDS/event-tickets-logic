@@ -12,5 +12,6 @@ public interface EventService {
     Event updateEvent(Event event);
     Event cancelEvent(Long eventId);
     List<Event> findUpcomingEventsByCategory(long categoryId);
+    List<Event> findUpcomingEventsByLocation(String location);
 
 }

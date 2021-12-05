@@ -15,5 +15,7 @@ public interface EventRepository
   List<Event> findByCategoryIdAndTimeOfTheEventAfter(long id, LocalDateTime localDateTime);
     List<User> getParticipants(long eventId);
     Event findByName(String name);
+    List<Event> findByLocationAndTimeOfTheEventAfter(String location,
+        LocalDateTime timeOfTheEvent);
 
 }

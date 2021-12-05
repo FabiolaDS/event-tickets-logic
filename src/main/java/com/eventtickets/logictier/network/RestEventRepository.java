@@ -97,4 +97,16 @@ public class RestEventRepository extends RestRepository
 			return null;
 		}
 	}
+
+	@Override
+	public List<Event> findByLocationAndTimeOfTheEventAfter(String location,
+		LocalDateTime timeOfTheEvent) {
+		ResponseEntity<List<Event>> response = rest().exchange(
+			url("byLocationAndTime/?location={location}&dateTime={dateTime}"),
+			HttpMethod.GET, null,
+			new ParameterizedTypeReference<List<Event>>() {
+			}, location, timeOfTheEvent);
+
+		return response.getBody();
+	}
 }

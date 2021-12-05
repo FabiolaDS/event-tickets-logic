@@ -305,4 +305,18 @@ public class MessageQueueConfig {
 			.with("getAllUsers");
 	}
 
+	@Bean
+	public Queue getUpcomingEventsByLocationQueue() {
+		return new Queue("getUpcomingEventsByLocation");
+	}
+
+	@Bean
+	public Binding getUpcomingEventsByLocationBinding(
+		DirectExchange logicTierExchange,
+		Queue getUpcomingEventsByLocationQueue) {
+		return BindingBuilder
+			.bind(getUpcomingEventsByLocationQueue)
+			.to(logicTierExchange)
+			.with("getUpcomingEventsByLocation");
+	}
 }
