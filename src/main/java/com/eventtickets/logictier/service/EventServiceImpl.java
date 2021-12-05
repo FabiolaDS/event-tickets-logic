@@ -71,7 +71,9 @@ public class EventServiceImpl implements EventService {
 		event.setIsCancelled(true);
 		event = eventRepository.updateEvent(eventId, event);
 		Notification notification = new Notification("Event Cancellation",
-			String.format("Event %s has been cancelled", event.getName()),
+			String.format(
+				"Event %s has been cancelled. Please contact us on evententhusiast@gmail.com to request your refund",
+				event.getName()),
 			LocalDateTime.now());
 		List<Long> userIds = eventRepository.getParticipants(eventId).stream()
 			.map(User::getId).collect(
