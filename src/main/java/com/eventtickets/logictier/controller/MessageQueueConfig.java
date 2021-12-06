@@ -319,4 +319,19 @@ public class MessageQueueConfig {
 			.to(logicTierExchange)
 			.with("getUpcomingEventsByLocation");
 	}
+
+	@Bean
+	public Queue removeAdminPrivilegeQueue() {
+		return new Queue("removeAdminPrivilege");
+	}
+
+	@Bean
+	public Binding removeAdminPrivilegeBinding(
+		DirectExchange logicTierExchange,
+		Queue removeAdminPrivilegeQueue) {
+		return BindingBuilder
+			.bind(removeAdminPrivilegeQueue)
+			.to(logicTierExchange)
+			.with("removeAdminPrivilege");
+	}
 }

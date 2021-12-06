@@ -133,4 +133,23 @@ public class MessageQueueUserController extends AbstractMessageQueueController {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@RabbitListener(queues = "removeAdminPrivilege")
+	public void removeAdminPrivilege(Message request) {
+		try {
+			long userId = deserialize(request.getBody(), Long.class);
+			succeed(request, serialize(service.removeAdminPrivilege(userId)));
+		}
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+		catch (IllegalArgumentException e) {
+			try {
+				fail(request, serialize(e.getMessage()));
+			}
+			catch (JsonProcessingException ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+	}
 }

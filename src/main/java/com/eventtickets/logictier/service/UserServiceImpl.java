@@ -39,8 +39,7 @@ public class UserServiceImpl implements UserService {
 			userDto.getFullName(),
 			userDto.getPassword());
 
-		if (userRepository.getAllUsers().size() == 0)
-		{
+		if (userRepository.getAllUsers().size() == 0) {
 			user.setAdmin(true); // set the first registered user as an admin
 
 		}
@@ -86,5 +85,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> getAllUsers() {
 		return userRepository.getAllUsers();
+	}
+
+	@Override
+	public User removeAdminPrivilege(long userId) {
+		User user = userRepository.findById(userId);
+		user.setAdmin(false);
+		return userRepository.updateUser(userId, user);
 	}
 }
