@@ -26,6 +26,9 @@ public class Event {
 	@NotBlank(message = "The location cannot be empty")
 	private String location;
 
+	@NotBlank(message = "The address cannot be empty")
+	private String address;
+
 	@NotBlank(message = "The image cannot be empty")
 	@URL(message = "Please specify a valid url")
 	private String thumbnail;
