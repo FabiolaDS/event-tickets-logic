@@ -79,6 +79,7 @@ public class TicketServiceImpl implements TicketService {
 					event.getTimeOfTheEvent(),
 					event.getThumbnail(),
 					event.getLocation(),
+					event.getAddress(),
 					event.getTicketPrice(),
 
 					e.getValue());

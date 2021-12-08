@@ -17,6 +17,7 @@ public class TicketGroupDTO
   private LocalDateTime timeOfTheEvent;
   private String thumbnail;
   private String location;
+  private String address;
   private double ticketPrice;
   private List<Ticket> tickets;
 
