@@ -55,10 +55,9 @@ public class TicketServiceImpl implements TicketService {
 				LocalDateTime.now());
 
 			ticket = ticketRepository
-				.createTicket(bookTicket.getBuyerId(), ticket);
+				.createTicket(ticket);
 			tickets.add(ticket);
 		}
-
 		return tickets;
 	}
 

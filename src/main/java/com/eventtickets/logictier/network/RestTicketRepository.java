@@ -21,8 +21,8 @@ public class RestTicketRepository extends RestRepository
 	}
 
 	@Override
-	public Ticket createTicket(long buyerId, Ticket ticket) {
-		return rest().postForObject(url(buyerId), ticket, Ticket.class);
+	public Ticket createTicket(Ticket ticket) {
+		return rest().postForObject(url(), ticket, Ticket.class);
 	}
 
 	@Override
